@@ -209,7 +209,7 @@ class AdvancedDifficultySystem:
         # Generar tablero base
         complete_board = self.board.generate_complete_board()
         
-        # Determinar rangos objetivo
+        # Determinar rangos objetivo según la clasificación
         if target_difficulty == 'facil':
             target_range = (1, 3)
         elif target_difficulty == 'medio':
@@ -222,19 +222,35 @@ class AdvancedDifficultySystem:
         best_final_difficulty = 0
         
         # Intentar múltiples variaciones
-        for attempt in range(20):
+        for attempt in range(30):
             puzzle = self._create_puzzle_variation(complete_board, target_difficulty)
             
-            # Calcular métricas
+            # Calcular métricas de cada aspecto (1-10)
             perm_diff = self.calculate_permutation_difficulty(puzzle)
             density_diff = self.calculate_density_difficulty(puzzle)
-            final_diff = (perm_diff + density_diff) / 2
+            
+            # Calcular dificultad final como promedio
+            final_diff = (perm_diff + density_diff) / 2.0
+            
+            # Clasificar según rangos ajustados
+            if final_diff <= 4.0:
+                classification = 'Fácil'
+            elif final_diff <= 4.5:
+                classification = 'Medio'
+            else:
+                classification = 'Difícil'
             
             metrics = {
                 'permutation_difficulty': perm_diff,
                 'density_difficulty': density_diff,
                 'final_difficulty': final_diff,
-                'target_range': target_range
+                'target_range': target_range,
+                'classification': classification,
+                'difficulty_breakdown': {
+                    'permutations': perm_diff,
+                    'density': density_diff,
+                    'final': final_diff
+                }
             }
             
             # Verificar si está en el rango objetivo
@@ -249,13 +265,27 @@ class AdvancedDifficultySystem:
             puzzle = self._create_puzzle_variation(complete_board, target_difficulty)
             perm_diff = self.calculate_permutation_difficulty(puzzle)
             density_diff = self.calculate_density_difficulty(puzzle)
-            final_diff = (perm_diff + density_diff) / 2
+            final_diff = (perm_diff + density_diff) / 2.0
+            
+            # Clasificar según rangos ajustados
+            if final_diff <= 4.0:
+                classification = 'Fácil'
+            elif final_diff <= 4.5:
+                classification = 'Medio'
+            else:
+                classification = 'Difícil'
             
             best_metrics = {
                 'permutation_difficulty': perm_diff,
                 'density_difficulty': density_diff,
                 'final_difficulty': final_diff,
-                'target_range': target_range
+                'target_range': target_range,
+                'classification': classification,
+                'difficulty_breakdown': {
+                    'permutations': perm_diff,
+                    'density': density_diff,
+                    'final': final_diff
+                }
             }
             best_puzzle = puzzle
         
@@ -268,7 +298,7 @@ class AdvancedDifficultySystem:
         self.density_difficulty = best_metrics['density_difficulty']
         self.final_difficulty = best_metrics['final_difficulty']
         
-        return best_puzzle, int(best_metrics['final_difficulty']), best_metrics
+        return best_puzzle, int(round(best_metrics['final_difficulty'])), best_metrics
     
     def _create_puzzle_variation(self, complete_board: List[List[int]], target_difficulty: str) -> List[List[int]]:
         """Crea una variación del puzzle usando remoción inteligente"""
@@ -313,13 +343,22 @@ class AdvancedDifficultySystem:
     
     def get_difficulty_metrics(self) -> Dict:
         """Obtiene las métricas de dificultad actuales"""
+        # Clasificar según rangos ajustados
+        if self.final_difficulty <= 4.0:
+            classification = 'Fácil'
+        elif self.final_difficulty <= 4.5:
+            classification = 'Medio'
+        else:
+            classification = 'Difícil'
+        
         return {
             'permutation_difficulty': self.permutation_difficulty,
             'density_difficulty': self.density_difficulty,
             'final_difficulty': self.final_difficulty,
+            'classification': classification,
             'difficulty_breakdown': {
-                'permutations': f"{self.permutation_difficulty}/10",
-                'density': f"{self.density_difficulty}/10",
-                'final': f"{self.final_difficulty:.1f}/10"
+                'permutations': self.permutation_difficulty,
+                'density': self.density_difficulty,
+                'final': self.final_difficulty
             }
         }

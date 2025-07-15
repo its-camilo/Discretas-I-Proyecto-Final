@@ -16,7 +16,7 @@ class SudokuBoard:
         self.solution = [[0 for _ in range(self.size)] for _ in range(self.size)]
         self.difficulty_level = 1
         self.difficulty_metrics = {}
-        self.use_advanced_difficulty = True
+        self.use_advanced_difficulty = True  # Siempre usar sistema avanzado
         
     def is_valid(self, board: List[List[int]], row: int, col: int, num: int) -> bool:
         """Verifica si un número es válido en una posición específica"""
@@ -103,14 +103,14 @@ class SudokuBoard:
         self.board = copy.deepcopy(puzzle)
         self.initial_board = copy.deepcopy(puzzle)
         self.solution = copy.deepcopy(advanced_system.board.solution)
-        self.difficulty_level = final_difficulty
+        self.difficulty_level = metrics['final_difficulty']  # Usar el valor float directamente
         self.difficulty_metrics = metrics
         
         # Guardar información detallada de dificultad
         self.last_difficulty_info = {
             'permutations': metrics['permutation_difficulty'],
             'density': metrics['density_difficulty'],
-            'average': final_difficulty,
+            'average': metrics['final_difficulty'],  # Usar el valor float directamente
             'system': 'advanced'
         }
         
@@ -205,20 +205,15 @@ class SudokuBoard:
                     if self.is_cell_editable(i, j):
                         self.board[i][j] = temp_board[i][j]
     
-    def get_difficulty_level(self) -> int:
+    def get_difficulty_level(self) -> float:
         """Retorna el nivel de dificultad actual"""
-        return int(self.difficulty_level)
+        if hasattr(self, 'difficulty_metrics') and self.difficulty_metrics:
+            return self.difficulty_metrics.get('final_difficulty', self.difficulty_level)
+        return self.difficulty_level
     
     def get_difficulty_metrics(self) -> Dict:
         """Retorna las métricas detalladas de dificultad"""
         if hasattr(self, 'difficulty_metrics') and self.difficulty_metrics:
-            # Añadir breakdown si tenemos last_difficulty_info
-            if hasattr(self, 'last_difficulty_info') and self.last_difficulty_info:
-                self.difficulty_metrics['difficulty_breakdown'] = {
-                    'permutations': self.last_difficulty_info['permutations'],
-                    'density': self.last_difficulty_info['density'],
-                    'average': self.last_difficulty_info['average']
-                }
             return self.difficulty_metrics
         else:
             return {
@@ -228,14 +223,6 @@ class SudokuBoard:
                 'difficulty_breakdown': {
                     'permutations': self.difficulty_level,
                     'density': self.difficulty_level,
-                    'average': self.difficulty_level
+                    'final': self.difficulty_level
                 }
             }
-
-    def toggle_difficulty_system(self) -> bool:
-        """Alterna entre sistema básico y avanzado"""
-        self.use_advanced_difficulty = not self.use_advanced_difficulty
-        return self.use_advanced_difficulty
-        """Alterna entre sistema básico y avanzado"""
-        self.use_advanced_difficulty = not self.use_advanced_difficulty
-        return self.use_advanced_difficulty

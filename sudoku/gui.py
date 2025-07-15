@@ -49,20 +49,19 @@ class SudokuGUI:
             }
             buttons.append(button)
         
-        # Botón para alternar sistema de dificultad
-        toggle_button = {
-            'rect': pygame.Rect(x_pos, y_pos + 3 * (BUTTON_HEIGHT + 10) + 10, 
+        # Botón de nuevo juego - con espaciado suficiente
+        nuevo_button = {
+            'rect': pygame.Rect(x_pos, y_pos + 3 * (BUTTON_HEIGHT + 10) + 30, 
                               BUTTON_WIDTH, BUTTON_HEIGHT),
-            'text': 'Sist. Avanzado' if self.board.use_advanced_difficulty else 'Sist. Básico',
-            'action': 'toggle_difficulty_system',
-            'color': LIGHT_GREEN if self.board.use_advanced_difficulty else LIGHT_GRAY
+            'text': 'Nuevo Juego',
+            'action': 'nuevo',
+            'color': LIGHT_GRAY
         }
-        buttons.append(toggle_button)
+        buttons.append(nuevo_button)
         
-        # Botones de acción en el panel lateral
-        y_pos = BOARD_Y + 300  # Ajustado para más espacio
-        actions = [('nuevo', 'Nuevo Juego'), ('resolver', 'Resolver'), 
-                  ('verificar', 'Verificar'), ('limpiar', 'Limpiar')]
+        # Botones de acción restantes - espaciado aumentado para evitar solapamiento
+        y_pos = BOARD_Y + 350  # Aumentado para evitar solapamiento
+        actions = [('resolver', 'Resolver'), ('verificar', 'Verificar'), ('limpiar', 'Limpiar')]
         
         for i, (action, label) in enumerate(actions):
             button = {
@@ -138,18 +137,6 @@ class SudokuGUI:
                 if button['action'].startswith('difficulty_'):
                     diff = button['action'].split('_')[1]
                     button['color'] = LIGHT_BLUE if diff == difficulty else LIGHT_GRAY
-        
-        elif action == 'toggle_difficulty_system':
-            # Alternar sistema de dificultad
-            is_advanced = self.board.toggle_difficulty_system()
-            
-            # Generar nuevo puzzle con el sistema actualizado
-            self.board.generate_puzzle(self.current_difficulty)
-            self.verification_results = None
-            self.selected_cell = None
-            
-            # Recrear botones para actualizar el texto del botón toggle
-            self.buttons = self.create_buttons()
         
         elif action == 'nuevo':
             self.board.generate_puzzle(self.current_difficulty)
@@ -253,159 +240,10 @@ class SudokuGUI:
         title = self.title_font.render("SUDOKU", True, BLACK)
         title_rect = title.get_rect(center=(SIDEBAR_X + SIDEBAR_WIDTH // 2, 40))
         self.screen.blit(title, title_rect)
-        
-        # Información de dificultad actual con métricas avanzadas
-        current_level = self.board.get_difficulty_level()
-        metrics = self.board.get_difficulty_metrics()
-        
-        if self.board.use_advanced_difficulty and 'difficulty_breakdown' in metrics:
-            difficulty_text = f"Dificultad Final: {current_level}/10"
-            breakdown = metrics['difficulty_breakdown']
-            perm_text = f"Permutaciones: {breakdown['permutations']}"
-            density_text = f"Densidad: {breakdown['density']}"
-        else:
-            difficulty_text = f"Dificultad: {current_level}/10"
-            perm_text = "Sistema básico activo"
-            density_text = ""
-        
-        # Mostrar dificultad principal
-        difficulty_surface = self.info_font.render(difficulty_text, True, BLACK)
-        difficulty_rect = difficulty_surface.get_rect(x=SIDEBAR_X, y=BOARD_Y + 10)
-        self.screen.blit(difficulty_surface, difficulty_rect)
-        
-        # Mostrar métricas detalladas si está el sistema avanzado
-        if self.board.use_advanced_difficulty:
-            perm_surface = pygame.font.Font(None, 16).render(perm_text, True, DARK_GRAY)
-            perm_rect = perm_surface.get_rect(x=SIDEBAR_X, y=BOARD_Y + 30)
-            self.screen.blit(perm_surface, perm_rect)
-            
-            if density_text:
-                density_surface = pygame.font.Font(None, 16).render(density_text, True, DARK_GRAY)
-                density_rect = density_surface.get_rect(x=SIDEBAR_X, y=BOARD_Y + 45)
-                self.screen.blit(density_surface, density_rect)
-        else:
-            basic_surface = pygame.font.Font(None, 16).render(perm_text, True, DARK_GRAY)
-            basic_rect = basic_surface.get_rect(x=SIDEBAR_X, y=BOARD_Y + 30)
-            self.screen.blit(basic_surface, basic_rect)
-        
-        # Etiqueta para botones de dificultad
-        diff_label = self.info_font.render("Seleccionar Dificultad:", True, DARK_GRAY)
-        diff_label_rect = diff_label.get_rect(x=SIDEBAR_X, y=BOARD_Y + 60)
-        self.screen.blit(diff_label, diff_label_rect)
-        
-        # Explicación de rangos de dificultad (a la derecha de los botones)
-        ranges_x = SIDEBAR_X + BUTTON_WIDTH + 15
-        ranges_y = BOARD_Y + 80
-        ranges_info = [
-            "Rangos:",
-            "Fácil: 1-3",
-            "Medio: 4-6", 
-            "Difícil: 7-10"
-        ]
-        
-        for i, info in enumerate(ranges_info):
-            color = DARK_GRAY if i == 0 else BLACK
-            font_size = INFO_FONT_SIZE - 2 if i == 0 else INFO_FONT_SIZE - 4
-            font = pygame.font.Font(None, font_size)
-            text = font.render(info, True, color)
-            text_rect = text.get_rect(x=ranges_x, y=ranges_y + i * 18)
-            self.screen.blit(text, text_rect)
-        
-        # Información del sistema de dificultad
-        if self.board.use_advanced_difficulty:
-            system_info = [
-                "Sistema Avanzado:",
-                "• Analiza permutaciones",
-                "• Evalúa densidad de celdas",
-                "• Celdas disjuntas = más difícil"
-            ]
-        else:
-            system_info = [
-                "Sistema Básico:",
-                "• Remoción aleatoria",
-                "• Dificultad por cantidad"
-            ]
-        
-        system_y = ranges_y + len(ranges_info) * 18 + 10
-        for i, info in enumerate(system_info):
-            color = DARK_GRAY if i == 0 else BLACK
-            font_size = INFO_FONT_SIZE - 4 if i == 0 else 12
-            font = pygame.font.Font(None, font_size)
-            text = font.render(info, True, color)
-            text_rect = text.get_rect(x=ranges_x, y=system_y + i * 16)
-            self.screen.blit(text, text_rect)
-        
-        # Etiqueta para botones de acción
-        actions_label_y = BOARD_Y + 280
-        actions_label = self.info_font.render("Controles del Juego:", True, DARK_GRAY)
-        actions_label_rect = actions_label.get_rect(x=SIDEBAR_X, y=actions_label_y)
-        self.screen.blit(actions_label, actions_label_rect)
-        
-        # Instrucciones de uso (debajo de los botones de acción)
-        instructions_y = BOARD_Y + 520
-        instructions = [
-            "Instrucciones de Uso:",
-            "• Clic en celda vacía para seleccionar",
-            "• Teclas 1-9 para ingresar números",
-            "• DELETE/BACKSPACE para borrar",
-            "• ESC para salir del juego"
-        ]
-        
-        for i, instruction in enumerate(instructions):
-            color = DARK_GRAY if i == 0 else BLACK
-            font_size = INFO_FONT_SIZE if i == 0 else 14
-            font = pygame.font.Font(None, font_size)
-            text = font.render(instruction, True, color)
-            text_rect = text.get_rect(x=SIDEBAR_X, y=instructions_y + i * 20)
-            self.screen.blit(text, text_rect)
-        
-        # Información de reglas del juego
-        rules_y = instructions_y + len(instructions) * 20 + 25
-        rules_info = [
-            "Reglas del Sudoku:",
-            "• Números grises son fijos (no editables)",
-            "• No repetir números en la misma fila",
-            "• No repetir números en la misma columna",
-            "• No repetir números en cuadrado 3x3",
-            "• Verificar: Verde=Correcto, Rojo=Error"
-        ]
-        
-        for i, rule in enumerate(rules_info):
-            color = DARK_GRAY if i == 0 else BLACK
-            font_size = INFO_FONT_SIZE if i == 0 else 12
-            font = pygame.font.Font(None, font_size)
-            text = font.render(rule, True, color)
-            text_rect = text.get_rect(x=SIDEBAR_X, y=rules_y + i * 16)
-            self.screen.blit(text, text_rect)
     
     def draw(self):
         """Dibuja toda la interfaz"""
         self.screen.fill(WHITE)
-        
-        # Dibujar línea separadora entre tablero y panel lateral
-        separator_x = BOARD_X + BOARD_WIDTH + 25
-        pygame.draw.line(self.screen, LIGHT_GRAY, 
-                        (separator_x, 20), 
-                        (separator_x, self.screen.get_height() - 20), 2)
-        
-        # Dibujar fondo del panel lateral
-        sidebar_rect = pygame.Rect(SIDEBAR_X - 20, 20, 
-                                  SIDEBAR_WIDTH + 40, 
-                                  self.screen.get_height() - 40)
-        pygame.draw.rect(self.screen, (250, 250, 250), sidebar_rect)
-        pygame.draw.rect(self.screen, LIGHT_GRAY, sidebar_rect, 1)
-        
-        # Líneas divisorias horizontales en el panel lateral
-        line_y_positions = [
-            BOARD_Y + 185,  # Después de los botones de dificultad
-            BOARD_Y + 405,  # Después de los botones de acción
-            BOARD_Y + 530   # Después de las instrucciones
-        ]
-        
-        for y_pos in line_y_positions:
-            pygame.draw.line(self.screen, LIGHT_GRAY, 
-                           (SIDEBAR_X, y_pos), 
-                           (SIDEBAR_X + SIDEBAR_WIDTH - 20, y_pos), 1)
         
         self.draw_board()
         self.draw_buttons()
