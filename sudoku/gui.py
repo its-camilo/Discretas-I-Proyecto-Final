@@ -33,15 +33,16 @@ class SudokuGUI:
         """Crea los botones de la interfaz en el panel lateral"""
         buttons = []
         
-        # Botones de dificultad en el panel lateral
-        y_pos = BOARD_Y + 80  # Ajustado para más espacio
+        # Calcular posición inicial centrada respecto al tablero
+        start_y = BOARD_Y + (BOARD_HEIGHT - 7 * (BUTTON_HEIGHT + 10)) // 2
         x_pos = SIDEBAR_X
         
+        # Botones de dificultad
         difficulties = [('facil', 'Fácil'), ('medio', 'Medio'), ('dificil', 'Difícil')]
         
         for i, (diff, label) in enumerate(difficulties):
             button = {
-                'rect': pygame.Rect(x_pos, y_pos + i * (BUTTON_HEIGHT + 10), 
+                'rect': pygame.Rect(x_pos, start_y + i * (BUTTON_HEIGHT + 15), 
                                   BUTTON_WIDTH, BUTTON_HEIGHT),
                 'text': label,
                 'action': f'difficulty_{diff}',
@@ -49,9 +50,9 @@ class SudokuGUI:
             }
             buttons.append(button)
         
-        # Botón de nuevo juego - con espaciado suficiente
+        # Botón de nuevo juego
         nuevo_button = {
-            'rect': pygame.Rect(x_pos, y_pos + 3 * (BUTTON_HEIGHT + 10) + 30, 
+            'rect': pygame.Rect(x_pos, start_y + 3 * (BUTTON_HEIGHT + 15) + 20, 
                               BUTTON_WIDTH, BUTTON_HEIGHT),
             'text': 'Nuevo Juego',
             'action': 'nuevo',
@@ -59,13 +60,13 @@ class SudokuGUI:
         }
         buttons.append(nuevo_button)
         
-        # Botones de acción restantes - espaciado aumentado para evitar solapamiento
-        y_pos = BOARD_Y + 350  # Aumentado para evitar solapamiento
+        # Botones de acción
+        actions_start_y = start_y + 4 * (BUTTON_HEIGHT + 15) + 40
         actions = [('resolver', 'Resolver'), ('verificar', 'Verificar'), ('limpiar', 'Limpiar')]
         
         for i, (action, label) in enumerate(actions):
             button = {
-                'rect': pygame.Rect(x_pos, y_pos + i * (BUTTON_HEIGHT + 10), 
+                'rect': pygame.Rect(x_pos, actions_start_y + i * (BUTTON_HEIGHT + 15), 
                                   BUTTON_WIDTH, BUTTON_HEIGHT),
                 'text': label,
                 'action': action,
@@ -236,9 +237,9 @@ class SudokuGUI:
     def draw_info(self):
         """Dibuja información en el panel lateral"""
         
-        # Título principal
+        # Título principal - centrado respecto a toda la ventana
         title = self.title_font.render("SUDOKU", True, BLACK)
-        title_rect = title.get_rect(center=(SIDEBAR_X + SIDEBAR_WIDTH // 2, 40))
+        title_rect = title.get_rect(center=(WINDOW_WIDTH // 2, 40))
         self.screen.blit(title, title_rect)
     
     def draw(self):

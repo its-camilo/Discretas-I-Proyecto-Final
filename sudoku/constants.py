@@ -16,8 +16,8 @@ BOARD_SIZE = 9
 CELL_SIZE = 60
 BOARD_WIDTH = BOARD_SIZE * CELL_SIZE
 BOARD_HEIGHT = BOARD_SIZE * CELL_SIZE
-# Centrar el tablero horizontalmente
-BOARD_X = (WINDOW_WIDTH - BOARD_WIDTH - 450) // 2  # Centrado considerando el panel lateral
+# Centrar el tablero horizontalmente, dejando espacio para los botones
+BOARD_X = (WINDOW_WIDTH - BOARD_WIDTH - 200) // 2  # Centrado con espacio para botones
 BOARD_Y = (WINDOW_HEIGHT - BOARD_HEIGHT) // 2  # Centrado verticalmente
 
 # Colores
@@ -40,13 +40,13 @@ TITLE_FONT_SIZE = 48
 INFO_FONT_SIZE = 20
 
 # Configuración de botones
-BUTTON_WIDTH = 140
+BUTTON_WIDTH = 160  # Ancho ajustado para el panel lateral
 BUTTON_HEIGHT = 50
 BUTTON_MARGIN = 15
 
 # Configuración de la interfaz lateral
-SIDEBAR_X = BOARD_X + BOARD_WIDTH + 50  # Posición del panel lateral centrado
-SIDEBAR_WIDTH = 400  # Ancho del panel lateral
+SIDEBAR_WIDTH = 200  # Ancho del panel lateral reducido
+SIDEBAR_X = BOARD_X + BOARD_WIDTH + 50  # Panel lateral al lado derecho del tablero
 BUTTON_SPACING = 20
 
 # Número de celdas iniciales
