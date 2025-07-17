@@ -28,7 +28,7 @@ def ejemplo_resolucion():
     """Ejemplo de resolución de puzzle"""
     
     board = SudokuBoard()
-    board.generate_puzzle('medio')
+    board.generate_puzzle('dificil')
     
     print("Tablero inicial:")
     for row in board.board:
@@ -68,7 +68,7 @@ def ejemplo_hints():
     """Ejemplo de uso del sistema de pistas"""
     
     board = SudokuBoard()
-    board.generate_puzzle('medio')
+    board.generate_puzzle('facil')
     
     hints = SudokuHints(board)
     

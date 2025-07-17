@@ -4,6 +4,7 @@ Lógica principal del tablero de Sudoku con sistema avanzado de dificultad
 
 import random
 import copy
+import time
 from typing import List, Tuple, Optional, Dict
 
 class SudokuBoard:
@@ -83,7 +84,7 @@ class SudokuBoard:
             for j in range(3):
                 board[row + i][col + j] = nums[i * 3 + j]
     
-    def generate_puzzle(self, difficulty: str = 'medio') -> Tuple[List[List[int]], int]:
+    def generate_puzzle(self, difficulty: str = 'facil') -> Tuple[List[List[int]], int]:
         """Genera un puzzle usando el sistema avanzado o básico"""
         
         if self.use_advanced_difficulty:
@@ -91,7 +92,7 @@ class SudokuBoard:
         else:
             return self.generate_basic_puzzle(difficulty)
     
-    def generate_advanced_puzzle(self, difficulty: str = 'medio') -> Tuple[List[List[int]], int]:
+    def generate_advanced_puzzle(self, difficulty: str = 'facil') -> Tuple[List[List[int]], int]:
         """Genera un puzzle con sistema avanzado de dificultad"""
         
         from .advanced_difficulty import AdvancedDifficultySystem
@@ -115,7 +116,7 @@ class SudokuBoard:
         
         return puzzle, final_difficulty
     
-    def generate_basic_puzzle(self, difficulty: str = 'medio') -> Tuple[List[List[int]], int]:
+    def generate_basic_puzzle(self, difficulty: str = 'facil') -> Tuple[List[List[int]], int]:
         """Genera un puzzle con sistema básico de dificultad"""
         
         # Generar tablero completo
@@ -125,27 +126,22 @@ class SudokuBoard:
         # Crear puzzle removiendo números
         puzzle = copy.deepcopy(complete_board)
         
-        # Determinar número de celdas a remover basado en dificultad
+        # NUEVO SISTEMA: Misma cantidad de celdas, diferente distribución
+        cells_to_remove = 81 - 30  # Siempre 30 celdas llenas
+        
+        # Determinar dificultad basada en distribución, no cantidad
         if difficulty == 'facil':
-            cells_to_remove = random.randint(46, 50)
             self.difficulty_level = random.randint(1, 3)
+            # Distribución conectada para puzzles fáciles
+            puzzle = self._create_connected_distribution(puzzle, cells_to_remove)
         elif difficulty == 'medio':
-            cells_to_remove = random.randint(51, 55)
             self.difficulty_level = random.randint(4, 6)
+            # Distribución media para puzzles intermedios
+            puzzle = self._create_medium_distribution(puzzle, cells_to_remove)
         else:  # dificil
-            cells_to_remove = random.randint(56, 60)
-            self.difficulty_level = random.randint(7, 10)
-        
-        # Ajustar para que siempre queden exactamente 30 números iniciales
-        cells_to_remove = 81 - 30
-        
-        # Remover números aleatoriamente
-        positions = [(i, j) for i in range(self.size) for j in range(self.size)]
-        random.shuffle(positions)
-        
-        for i in range(cells_to_remove):
-            row, col = positions[i]
-            puzzle[row][col] = 0
+            self.difficulty_level = random.randint(8, 10)
+            # Distribución dispersa para puzzles difíciles
+            puzzle = self._create_dispersed_distribution(puzzle, cells_to_remove)
         
         self.board = copy.deepcopy(puzzle)
         self.initial_board = copy.deepcopy(puzzle)
@@ -196,13 +192,46 @@ class SudokuBoard:
     
     def solve_current_board(self):
         """Resuelve el tablero actual manteniendo los números iniciales"""
+        print("=" * 50)
+        print("🚀 INICIANDO RESOLUCIÓN DEL SUDOKU")
+        print("=" * 50)
+        start_time = time.time()
+        
         temp_board = copy.deepcopy(self.board)
-        if self.solve_backtracking(temp_board):
+        solved = self.solve_backtracking(temp_board)
+        
+        end_time = time.time()
+        resolution_time = end_time - start_time
+        
+        if solved:
             # Solo actualizar celdas editables
             for i in range(self.size):
                 for j in range(self.size):
                     if self.is_cell_editable(i, j):
                         self.board[i][j] = temp_board[i][j]
+            
+            print("✅ RESULTADO: Sudoku resuelto exitosamente")
+            print(f"⏱️  TIEMPO DE RESOLUCIÓN: {resolution_time:.4f} segundos ({resolution_time * 1000:.2f} ms)")
+            
+            # Categorizar velocidad
+            if resolution_time < 0.001:
+                speed_category = "⚡ ULTRA RÁPIDO"
+            elif resolution_time < 0.01:
+                speed_category = "🏃 MUY RÁPIDO"
+            elif resolution_time < 0.1:
+                speed_category = "🚶 RÁPIDO"
+            elif resolution_time < 1.0:
+                speed_category = "🐢 NORMAL"
+            else:
+                speed_category = "🐌 LENTO"
+            
+            print(f"📊 VELOCIDAD: {speed_category}")
+        else:
+            print("❌ RESULTADO: No se pudo resolver el Sudoku")
+            print(f"⏱️  TIEMPO TRANSCURRIDO: {resolution_time:.4f} segundos")
+            print("🔍 CAUSA: El puzzle podría no tener solución o estar mal configurado")
+        
+        print("=" * 50)
     
     def get_difficulty_level(self) -> float:
         """Retorna el nivel de dificultad actual"""
@@ -223,3 +252,184 @@ class SudokuBoard:
                     'final': self.difficulty_level
                 }
             }
+    
+    def _create_connected_distribution(self, puzzle, cells_to_remove):
+        """Crear distribución conectada para puzzles fáciles"""
+        import copy
+        result = copy.deepcopy(puzzle)
+        
+        # Estrategia: mantener clusters conectados en bloques 3x3
+        blocks = [(r, c) for r in range(0, 9, 3) for c in range(0, 9, 3)]
+        random.shuffle(blocks)
+        
+        removed = 0
+        for block_r, block_c in blocks:
+            if removed >= cells_to_remove:
+                break
+                
+            # En cada bloque, remover celdas manteniendo conectividad
+            block_positions = [(block_r + i, block_c + j) 
+                             for i in range(3) for j in range(3)]
+            
+            # Mantener al menos 3-4 celdas por bloque conectadas
+            to_remove_in_block = min(6, cells_to_remove - removed)
+            random.shuffle(block_positions)
+            
+            for i in range(to_remove_in_block):
+                if removed < cells_to_remove:
+                    row, col = block_positions[i]
+                    result[row][col] = 0
+                    removed += 1
+        
+        # Completar remoción si es necesario
+        if removed < cells_to_remove:
+            remaining_positions = [(i, j) for i in range(9) for j in range(9) 
+                                 if result[i][j] != 0]
+            random.shuffle(remaining_positions)
+            
+            for i in range(cells_to_remove - removed):
+                if i < len(remaining_positions):
+                    row, col = remaining_positions[i]
+                    result[row][col] = 0
+        
+        return result
+    
+    def _create_dispersed_distribution(self, puzzle, cells_to_remove):
+        """Crear distribución dispersa para puzzles difíciles"""
+        import copy
+        result = copy.deepcopy(puzzle)
+        
+        # Estrategia: maximizar dispersión usando algoritmo de separación
+        positions = [(i, j) for i in range(9) for j in range(9)]
+        
+        # Calcular scores de desconexión para cada posición
+        def calculate_disconnection_score(pos, current_empty):
+            row, col = pos
+            score = 0
+            
+            # Bonus por aislar filas/columnas
+            row_empty = sum(1 for c in range(9) if (row, c) in current_empty)
+            col_empty = sum(1 for r in range(9) if (r, col) in current_empty)
+            score += row_empty * 2 + col_empty * 2
+            
+            # Bonus por aislar bloques 3x3
+            block_r, block_c = 3 * (row // 3), 3 * (col // 3)
+            block_empty = sum(1 for r in range(block_r, block_r + 3)
+                            for c in range(block_c, block_c + 3)
+                            if (r, c) in current_empty)
+            score += block_empty * 3
+            
+            return score
+        
+        # Remover celdas maximizando dispersión
+        removed_positions = set()
+        
+        for _ in range(cells_to_remove):
+            if len(positions) == 0:
+                break
+                
+            # Calcular scores para posiciones restantes
+            scores = [(pos, calculate_disconnection_score(pos, removed_positions)) 
+                     for pos in positions if pos not in removed_positions]
+            
+            if not scores:
+                break
+                
+            # Elegir posición con mayor score de desconexión
+            best_pos = max(scores, key=lambda x: x[1])[0]
+            row, col = best_pos
+            result[row][col] = 0
+            removed_positions.add(best_pos)
+        
+        return result
+    
+    def _create_medium_distribution(self, puzzle, cells_to_remove):
+        """Crear distribución media: balance entre conectividad y dispersión"""
+        import copy
+        result = copy.deepcopy(puzzle)
+        
+        # ESTRATEGIA MEDIA: Combinación de clusters y dispersión
+        # Crear algunos clusters conectados y algunas celdas dispersas
+        
+        all_positions = [(i, j) for i in range(9) for j in range(9)]
+        random.shuffle(all_positions)
+        
+        removed_positions = []
+        
+        # Fase 1: Crear algunos clusters (60% de las remociones)
+        cluster_removals = int(cells_to_remove * 0.6)
+        blocks = [(r, c) for r in range(0, 9, 3) for c in range(0, 9, 3)]
+        random.shuffle(blocks)
+        
+        removed_in_clusters = 0
+        for block_r, block_c in blocks:
+            if removed_in_clusters >= cluster_removals:
+                break
+                
+            # En cada bloque, remover algunas celdas de forma semi-conectada
+            block_positions = [(block_r + i, block_c + j) 
+                             for i in range(3) for j in range(3)]
+            random.shuffle(block_positions)
+            
+            # Remover 4-6 celdas por bloque cuando le toque
+            to_remove_in_block = min(random.randint(4, 6), 
+                                   cluster_removals - removed_in_clusters,
+                                   len(block_positions))
+            
+            for i in range(to_remove_in_block):
+                if block_positions[i] not in removed_positions:
+                    removed_positions.append(block_positions[i])
+                    removed_in_clusters += 1
+        
+        # Fase 2: Dispersión controlada (40% restante)
+        dispersed_removals = cells_to_remove - len(removed_positions)
+        
+        for _ in range(dispersed_removals):
+            if len(removed_positions) >= cells_to_remove:
+                break
+                
+            # Encontrar posición que maximice dispersión moderada
+            best_pos = None
+            best_score = -1
+            
+            for pos in all_positions:
+                if pos in removed_positions:
+                    continue
+                
+                row, col = pos
+                
+                # Score de dispersión moderada
+                dispersión_score = 0
+                
+                # Penalizar cercanía a celdas ya removidas (menos que en difícil)
+                for removed_row, removed_col in removed_positions:
+                    distance = abs(row - removed_row) + abs(col - removed_col)
+                    if distance <= 1:  # Muy cerca
+                        dispersión_score -= 2
+                    elif distance <= 3:  # Moderadamente cerca
+                        dispersión_score -= 0.5
+                
+                # Bonus moderado por bordes
+                if row == 0 or row == 8 or col == 0 or col == 8:
+                    dispersión_score += 1
+                
+                # Componente aleatorio para variabilidad
+                dispersión_score += random.uniform(0, 1)
+                
+                if dispersión_score > best_score:
+                    best_score = dispersión_score
+                    best_pos = pos
+            
+            if best_pos:
+                removed_positions.append(best_pos)
+            else:
+                # Fallback: tomar cualquier posición disponible
+                available = [pos for pos in all_positions if pos not in removed_positions]
+                if available:
+                    removed_positions.append(random.choice(available))
+        
+        # Aplicar la remoción
+        for row, col in removed_positions:
+            result[row][col] = 0
+            
+        return result

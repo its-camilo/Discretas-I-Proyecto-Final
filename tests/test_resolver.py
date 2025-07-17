@@ -18,7 +18,7 @@ def test_resolver():
     
     # Generar un puzzle
     print("Generando puzzle...")
-    board.generate_puzzle('medio')
+    board.generate_puzzle('dificil')
     
     # Mostrar el puzzle inicial
     print("\nPuzzle inicial:")

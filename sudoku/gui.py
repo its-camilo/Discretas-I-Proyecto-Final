@@ -15,7 +15,7 @@ class SudokuGUI:
         self.board = SudokuBoard()
         self.selected_cell = None
         self.verification_results = None
-        self.current_difficulty = 'medio'
+        self.current_difficulty = 'facil'
         
         # Inicializar fuentes
         self.font = pygame.font.Font(None, FONT_SIZE)

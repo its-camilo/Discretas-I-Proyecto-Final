@@ -1,53 +1,38 @@
 # Sudoku - Proyecto Final Matemáticas Discretas
 
-Un juego de Sudoku implementado en Python usando Pygame con generación automática de puzzles, diferentes niveles de dificultad y resolución por backtracking.
+Un juego de Sudoku implementado en Python con un sistema avanzado de dificultad basado en conceptos de Matemáticas Discretas.
+
+## Overview
+
+Este proyecto implementa un generador y solucionador de puzzles Sudoku utilizando algoritmos avanzados basados en:
+
+- **Permutaciones**: Análisis de grupos simétricos para evaluar la complejidad estructural
+- **Teoría de Grafos**: Modelado del puzzle como grafo de restricciones para medir conectividad
+- **Combinatoria**: Aplicación del principio de inclusión-exclusión y coeficientes binomiales para calcular complejidad
+
+El sistema genera puzzles con exactamente 30 números iniciales y clasifica automáticamente la dificultad en dos niveles (Fácil, Difícil) usando métricas matemáticas precisas.
 
 ## Características
 
-- **Generación automática de puzzles**: Basada en permutaciones y algoritmos de backtracking
-- **Tres niveles de dificultad**: Fácil (1-3), Medio (4-6), Difícil (7-10)
-- **30 números iniciales**: Cada puzzle comienza con exactamente 30 números que cumplen las reglas del Sudoku
-- **Interfaz lateral organizada**: Tablero a la izquierda, controles e información a la derecha
-- **Ventana maximizada**: Ventana grande pero no pantalla completa, permite minimizar
-- **Información clara de dificultad**: Muestra el nivel actual y los rangos de cada dificultad
-- **Resolución automática**: Usa algoritmo de backtracking para resolver el puzzle
-- **Verificación de solución**: Muestra en verde las celdas correctas y en rojo las incorrectas
-- **Funciones de limpieza**: Permite limpiar solo las celdas editables
+- Generación automática de puzzles con dificultad controlada
+- Sistema de dificultad basado en matemáticas discretas
+- Interfaz gráfica con Pygame
+- Resolución automática por backtracking
+- Verificación de soluciones en tiempo real
 
-## Requisitos
-
-- Python 3.7 o superior
-- Pygame
-
-## Instalación
-
-1. Clona o descarga este repositorio
-2. Instala las dependencias:
-   ```bash
-   pip install pygame
-   ```
-
-## Uso
-
-Ejecuta el juego desde la línea de comandos:
+## Instalación y Uso
 
 ```bash
+pip install pygame
 python main.py
 ```
 
 ## Controles
 
-- **Clic izquierdo**: Seleccionar una celda editable
-- **Teclas 1-9**: Ingresar un número en la celda seleccionada
-- **DELETE/BACKSPACE**: Borrar el número de la celda seleccionada
-- **ESC**: Salir del juego
-
-## Botones
-
-- **Fácil/Medio/Difícil**: Cambia el nivel de dificultad y genera un nuevo puzzle
-- **Nuevo Juego**: Genera un nuevo puzzle con la dificultad actual
-- **Resolver**: Resuelve automáticamente el puzzle usando backtracking
-- **Verificar**: Verifica la solución actual (verde = correcto, rojo = incorrecto)
+- **Clic**: Seleccionar celda
+- **1-9**: Ingresar número  
+- **DELETE**: Borrar número
+- **ESC**: Salir
 - **Limpiar**: Limpia todas las celdas editables (mantiene los números iniciales)
 
 ## Estructura del Proyecto
@@ -86,8 +71,7 @@ python main.py
 
 El sistema asigna automáticamente un nivel de dificultad del 1 al 10:
 - **Fácil**: Niveles 1-3
-- **Medio**: Niveles 4-6
-- **Difícil**: Niveles 7-10
+- **Difícil**: Niveles 8-10
 
 ## Características Técnicas
 

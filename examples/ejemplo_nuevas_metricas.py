@@ -18,7 +18,7 @@ def mostrar_analisis_detallado():
     system = AdvancedDifficultySystem()
     
     # Generar diferentes tipos de puzzles
-    niveles = ['facil', 'medio', 'dificil']
+    niveles = ['facil', 'dificil']
     
     for nivel in niveles:
         print(f"\n{'='*20} ANÁLISIS NIVEL: {nivel.upper()} {'='*20}")
@@ -40,10 +40,8 @@ def mostrar_analisis_detallado():
         print(f"   │  └─ Análisis de grupos simétricos S₃")
         print(f"   ├─ Teoría de Grafos: {breakdown['graph_theory']:.2f}/10")
         print(f"   │  └─ Grafo de restricciones, clustering, componentes")
-        print(f"   ├─ Combinatoria: {breakdown['combinatorics']:.2f}/10")
-        print(f"   │  └─ Inclusión-exclusión, coeficientes binomiales")
-        print(f"   └─ Teoría de Conjuntos: {breakdown['set_theory']:.2f}/10")
-        print(f"      └─ Intersecciones, uniones, cardinalidad")
+        print(f"   └─ Combinatoria: {breakdown['combinatorics']:.2f}/10")
+        print(f"      └─ Inclusión-exclusión, coeficientes binomiales")
         
         # Análisis específico de conceptos implementados
         print(f"\n🔍 CONCEPTOS MATEMÁTICOS APLICADOS:")
@@ -63,21 +61,12 @@ def mostrar_analisis_detallado():
         print(f"      • Entropía combinatorial: Σ log₂(candidatos)")
         print(f"      • Análisis de restricciones entre regiones")
         
-        # 3. Teoría de Conjuntos
-        print(f"   🎯 TEORÍA DE CONJUNTOS:")
-        print(f"      • Índice de Jaccard: |A∩B|/|A∪B|")
-        print(f"      • Análisis de intersecciones entre candidatos")
-        print(f"      • Diversidad por uniones regionales")
-        print(f"      • Cardinalidad promedio de conjuntos")
-        print(f"      • Detección de conjuntos singleton")
-        
         # Mostrar algunos datos específicos del puzzle generado
         print(f"\n📋 DATOS ESPECÍFICOS DE ESTE PUZZLE:")
         empty_count = sum(row.count(0) for row in puzzle)
         print(f"      • Vértices en grafo: {empty_count} (celdas vacías)")
         print(f"      • Aristas máximas: {empty_count * 20} (restricciones)")
         print(f"      • Grupos simétricos: 9 bloques × S₃ = 54 permutaciones")
-        print(f"      • Operaciones de conjunto: {empty_count * (empty_count-1)//2} pares analizados")
         
         print(f"\n" + "-" * 60)
 
@@ -95,7 +84,6 @@ def mostrar_formulas_matematicas():
         P = Permutaciones (números + filas + columnas + bloques)
         G = Teoría de Grafos (grado + clustering + componentes + densidad)
         C = Combinatoria (inclusión-exclusión + binomiales + entropía)
-        S = Teoría de Conjuntos (intersecciones + uniones + cardinalidad)
         """,
         
         "Teoría de Grafos": """
@@ -112,11 +100,6 @@ def mostrar_formulas_matematicas():
         "Coeficientes Binomiales": """
         C(n,k) = n! / (k!(n-k)!)
         Complejidad = Σᵢ Σₖ C(candidatos_i, k) para k=1,2,3
-        """,
-        
-        "Índice de Jaccard": """
-        J(A,B) = |A ∩ B| / |A ∪ B|
-        Mide similitud entre conjuntos de candidatos
         """
     }
     
@@ -132,6 +115,5 @@ if __name__ == "__main__":
     print("✅ NUEVAS FUNCIONALIDADES IMPLEMENTADAS:")
     print("   • Teoría de Grafos - Análisis de grafo de restricciones")
     print("   • Combinatoria - Inclusión-exclusión y coeficientes binomiales")  
-    print("   • Teoría de Conjuntos - Operaciones y análisis de candidatos")
     print("   • Sistema integrado con pesos matemáticamente justificados")
     print(f"{'='*80}")

@@ -69,7 +69,7 @@ class TestSudokuBoard(unittest.TestCase):
     
     def test_generate_puzzle(self):
         """Prueba la generación de puzzles"""
-        puzzle, difficulty = self.board.generate_puzzle('medio')
+        puzzle, difficulty = self.board.generate_puzzle('dificil')
         
         # Verificar que el puzzle es una matriz 9x9
         self.assertEqual(len(puzzle), 9)
