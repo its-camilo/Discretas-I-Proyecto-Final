@@ -109,7 +109,6 @@ class SudokuBoard:
         # Guardar información detallada de dificultad
         self.last_difficulty_info = {
             'permutations': metrics['permutation_difficulty'],
-            'density': metrics['density_difficulty'],
             'average': metrics['final_difficulty'],  # Usar el valor float directamente
             'system': 'advanced'
         }
@@ -218,11 +217,9 @@ class SudokuBoard:
         else:
             return {
                 'permutation_difficulty': self.difficulty_level,
-                'density_difficulty': self.difficulty_level,
                 'final_difficulty': self.difficulty_level,
                 'difficulty_breakdown': {
                     'permutations': self.difficulty_level,
-                    'density': self.difficulty_level,
                     'final': self.difficulty_level
                 }
             }

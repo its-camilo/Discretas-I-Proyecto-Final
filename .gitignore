@@ -156,11 +156,14 @@ cython_debug/
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be added to the global gitignore or merged into this project gitignore.  For a PyCharm
 #  project, it is recommended to use this template over the default, since it covers more files.
-.idea/
+.idea/ 
 
 # Visual Studio Code
 .vscode/
 *.code-workspace
+
+# GitHub workflows and templates
+.github/
 
 # OS generated files
 .DS_Store
@@ -185,3 +188,6 @@ local.properties
 # Pygame specific
 pygame_icon.ico
 pygame_icon.png
+
+# CLI tools
+.clinerules

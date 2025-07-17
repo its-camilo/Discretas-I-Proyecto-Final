@@ -32,8 +32,10 @@ def test_advanced_difficulty_system():
         if 'difficulty_breakdown' in metrics:
             breakdown = metrics['difficulty_breakdown']
             print(f"Permutaciones: {breakdown['permutations']}/10")
-            print(f"Densidad: {breakdown['density']}/10")
-            print(f"Promedio: {breakdown['average']}/10")
+            print(f"Teoría de Grafos: {breakdown['graph_theory']}/10")
+            print(f"Combinatoria: {breakdown['combinatorics']}/10")
+            print(f"Teoría de Conjuntos: {breakdown['set_theory']}/10")
+            print(f"Final: {breakdown['final']}/10")
         
         # Verificar si tenemos last_difficulty_info
         if hasattr(board, 'last_difficulty_info'):
