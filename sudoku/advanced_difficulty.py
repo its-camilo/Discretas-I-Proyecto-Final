@@ -26,8 +26,8 @@ class AdvancedDifficultySystem:
     def calculate_permutation_difficulty(self, board_matrix: List[List[int]]) -> int:
         """Calcula la dificultad usando múltiples conceptos de matemáticas discretas"""
         
-        # 1. PERMUTACIONES DE NÚMEROS (1-9)
-        number_permutations = self._analyze_number_permutations(board_matrix)
+        # 1. DISTRIBUCIÓN DE NÚMEROS (1-9)
+        number_permutations = self._measure_number_distribution_uniformity(board_matrix)
         
         # 2. PERMUTACIONES DE FILAS DENTRO DE BLOQUES
         row_permutations = self._analyze_row_permutations(board_matrix)
@@ -67,8 +67,8 @@ class AdvancedDifficultySystem:
         
         return difficulty
     
-    def _analyze_number_permutations(self, board_matrix: List[List[int]]) -> float:
-        """Analiza permutaciones de números 1-9"""
+    def _measure_number_distribution_uniformity(self, board_matrix: List[List[int]]) -> float:
+        """Evalúa la uniformidad en la frecuencia de los números del 1 al 9 en el tablero"""
         
         # Contar frecuencia de cada número
         number_counts = [0] * 10  # índice 0 no se usa
@@ -88,6 +88,7 @@ class AdvancedDifficultySystem:
         
         # Normalizar varianza (máximo teórico cuando todos están en una posición)
         max_variance = ((total_numbers - 0) ** 2 + 8 * (0 - avg_count) ** 2) / 9.0
+
         return min(1.0, variance / max_variance if max_variance > 0 else 0.0)
     
     def _analyze_row_permutations(self, board_matrix: List[List[int]]) -> float:
@@ -381,10 +382,12 @@ class AdvancedDifficultySystem:
                             candidates2 = self._get_possible_values(board_matrix, cell2[0], cell2[1])
                             
                             intersection = len(candidates1 & candidates2)
-                            union = len(candidates1 | candidates2)
-                            
+
                             # Aplicar inclusión-exclusión: |A ∪ B| = |A| + |B| - |A ∩ B|
-                            ie_value = (len(candidates1) + len(candidates2) - intersection) / union if union > 0 else 0
+                            union = (len(candidates1) + len(candidates2) - intersection)
+                            
+                            ie_value = intersection / union
+
                             total_restrictions += ie_value
         
         # Normalizar por número máximo de restricciones posibles

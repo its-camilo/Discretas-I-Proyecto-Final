@@ -126,7 +126,7 @@ class SudokuHints:
         """Obtiene los valores posibles para una celda"""
         possible = []
         for num in range(1, 10):
-            if self.board.is_valid(self.board.board, row, col, num):
+            if self.board.is_proper_coloring_at(self.board.board, row, col, num):
                 possible.append(num)
         return possible
     

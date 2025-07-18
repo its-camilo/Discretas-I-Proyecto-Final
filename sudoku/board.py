@@ -18,29 +18,32 @@ class SudokuBoard:
         self.difficulty_level = 1
         self.difficulty_metrics = {}
         self.use_advanced_difficulty = True  # Siempre usar sistema avanzado
-        
-    def is_valid(self, board: List[List[int]], row: int, col: int, num: int) -> bool:
-        """Verifica si un número es válido en una posición específica"""
-        
-        # Verificar fila
-        for j in range(self.size):
-            if board[row][j] == num:
-                return False
-        
-        # Verificar columna
+
+
+    def get_neighbors(self, row: int, col: int) -> set[tuple[int]]:
+        """Genera un conjunto con todas las celdas que estan en la misma fila, la misma columna o la misma cuadricula 3x3 que la celda indicada"""
+        neighbors = set()
+        # Mismos fila y columna
         for i in range(self.size):
-            if board[i][col] == num:
-                return False
-        
-        # Verificar cuadrado 3x3
+            if i != col:
+                neighbors.add((row, i))
+            if i != row:
+                neighbors.add((i, col))
+        # Misma región 3x3
         start_row = (row // 3) * 3
         start_col = (col // 3) * 3
-        
         for i in range(start_row, start_row + 3):
             for j in range(start_col, start_col + 3):
-                if board[i][j] == num:
-                    return False
-        
+                if (i, j) != (row, col):
+                    neighbors.add((i, j))
+        return neighbors
+    
+    def is_proper_coloring_at(self, board: List[List[int]], row: int, col: int, num: int) -> bool:
+        """Verifica si una celda (vertice) esta coloreada adecuadamente"""
+        for n_row, n_col in self.get_neighbors(row, col):
+            if board[n_row][n_col] == num:
+                return False
+            
         return True
     
     def solve_backtracking(self, board: List[List[int]]) -> bool:
@@ -50,7 +53,7 @@ class SudokuBoard:
             for j in range(self.size):
                 if board[i][j] == 0:
                     for num in range(1, 10):
-                        if self.is_valid(board, i, j, num):
+                        if self.is_proper_coloring_at(board, i, j, num):
                             board[i][j] = num
                             
                             if self.solve_backtracking(board):
@@ -176,15 +179,12 @@ class SudokuBoard:
         
         for i in range(self.size):
             for j in range(self.size):
+
                 if self.board[i][j] != 0:
-                    # Crear una copia temporal sin el número actual
-                    temp_board = copy.deepcopy(self.board)
-                    temp_board[i][j] = 0
                     
                     # Verificar si el número es válido en esta posición
-                    if not self.is_valid(temp_board, i, j, self.board[i][j]):
-                        validity[i][j] = False
-                elif self.board[i][j] == 0:
+                    validity[i][j] = self.is_proper_coloring_at(self.board, i, j, self.board[i][j])
+                else:
                     # Las celdas vacías no son válidas en una verificación completa
                     validity[i][j] = False
         
@@ -196,6 +196,8 @@ class SudokuBoard:
         print("🚀 INICIANDO RESOLUCIÓN DEL SUDOKU")
         print("=" * 50)
         start_time = time.time()
+
+        self.clear_editable_cells()
         
         temp_board = copy.deepcopy(self.board)
         solved = self.solve_backtracking(temp_board)

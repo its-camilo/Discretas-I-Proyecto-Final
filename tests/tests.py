@@ -32,7 +32,7 @@ class TestSudokuBoard(unittest.TestCase):
         
         # Todos los números del 1 al 9 deberían ser válidos en una celda vacía
         for num in range(1, 10):
-            self.assertTrue(self.board.is_valid(empty_board, 0, 0, num))
+            self.assertTrue(self.board.is_proper_coloring_at(empty_board, 0, 0, num))
     
     def test_is_valid_row_conflict(self):
         """Prueba la detección de conflictos en filas"""
@@ -40,10 +40,10 @@ class TestSudokuBoard(unittest.TestCase):
         test_board[0][0] = 5
         
         # El número 5 no debería ser válido en la misma fila
-        self.assertFalse(self.board.is_valid(test_board, 0, 1, 5))
+        self.assertFalse(self.board.is_proper_coloring_at(test_board, 0, 1, 5))
         
         # Otros números deberían ser válidos
-        self.assertTrue(self.board.is_valid(test_board, 0, 1, 3))
+        self.assertTrue(self.board.is_proper_coloring_at(test_board, 0, 1, 3))
     
     def test_is_valid_column_conflict(self):
         """Prueba la detección de conflictos en columnas"""
@@ -51,10 +51,10 @@ class TestSudokuBoard(unittest.TestCase):
         test_board[0][0] = 7
         
         # El número 7 no debería ser válido en la misma columna
-        self.assertFalse(self.board.is_valid(test_board, 1, 0, 7))
+        self.assertFalse(self.board.is_proper_coloring_at(test_board, 1, 0, 7))
         
         # Otros números deberían ser válidos
-        self.assertTrue(self.board.is_valid(test_board, 1, 0, 2))
+        self.assertTrue(self.board.is_proper_coloring_at(test_board, 1, 0, 2))
     
     def test_is_valid_box_conflict(self):
         """Prueba la detección de conflictos en cuadrados 3x3"""
@@ -62,10 +62,10 @@ class TestSudokuBoard(unittest.TestCase):
         test_board[0][0] = 4
         
         # El número 4 no debería ser válido en el mismo cuadrado 3x3
-        self.assertFalse(self.board.is_valid(test_board, 1, 1, 4))
+        self.assertFalse(self.board.is_proper_coloring_at(test_board, 1, 1, 4))
         
         # Debería ser válido en un cuadrado diferente
-        self.assertTrue(self.board.is_valid(test_board, 3, 3, 4))
+        self.assertTrue(self.board.is_proper_coloring_at(test_board, 3, 3, 4))
     
     def test_generate_puzzle(self):
         """Prueba la generación de puzzles"""
@@ -204,7 +204,7 @@ class TestSudokuHints(unittest.TestCase):
                 if self.board.is_cell_editable(i, j):
                     # Encontrar un número que cause conflicto
                     for num in range(1, 10):
-                        if not self.board.is_valid(self.board.board, i, j, num):
+                        if not self.board.is_proper_coloring_at(self.board.board, i, j, num):
                             self.board.set_cell_value(i, j, num)
                             mistakes = self.hints.count_mistakes()
                             self.assertGreater(mistakes, 0)
