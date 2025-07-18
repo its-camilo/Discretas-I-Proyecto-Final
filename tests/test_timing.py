@@ -18,7 +18,7 @@ def test_timing_comprehensive():
     board = SudokuBoard()
     
     # Configuración de test
-    difficulties = ['facil', 'medio', 'dificil']
+    difficulties = ['facil', 'dificil']
     num_tests = 50
     
     # Resultados globales
@@ -123,16 +123,6 @@ def test_timing_comprehensive():
             percentage_diff = (difference / easy_avg) * 100 if easy_avg > 0 else 0
             
             print(f"   📈 Diferencia Fácil → Difícil: +{difference:.4f}s (+{percentage_diff:.1f}%)")
-        
-        # Comparar medio vs extremos
-        if 'medio' in all_results:
-            medium_avg = all_results['medio']['avg']
-            if 'facil' in all_results:
-                easy_medium_diff = medium_avg - all_results['facil']['avg']
-                print(f"   📊 Diferencia Fácil → Medio: +{easy_medium_diff:.4f}s")
-            if 'dificil' in all_results:
-                medium_hard_diff = all_results['dificil']['avg'] - medium_avg
-                print(f"   📊 Diferencia Medio → Difícil: +{medium_hard_diff:.4f}s")
     
     # Estadísticas globales
     total_sudokus = sum(len(r['times']) for r in all_results.values())

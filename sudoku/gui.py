@@ -38,7 +38,7 @@ class SudokuGUI:
         x_pos = SIDEBAR_X
         
         # Botones de dificultad
-        difficulties = [('facil', 'Fácil'), ('medio', 'Medio'), ('dificil', 'Difícil')]
+        difficulties = [('facil', 'Fácil'), ('dificil', 'Difícil')]
         
         for i, (diff, label) in enumerate(difficulties):
             button = {

@@ -54,7 +54,6 @@ INITIAL_CELLS = 30
 
 # Configuración de dificultad
 DIFFICULTY_LEVELS = {
-    'facil': {'range': (1, 3), 'label': 'Fácil'},
-    'medio': {'range': (4, 6), 'label': 'Medio'},
+    'facil': {'range': (1, 6), 'label': 'Fácil'},
     'dificil': {'range': (7, 10), 'label': 'Difícil'}
 }

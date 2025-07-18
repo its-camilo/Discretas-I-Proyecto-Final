@@ -137,10 +137,6 @@ class SudokuBoard:
             self.difficulty_level = random.randint(1, 3)
             # Distribución conectada para puzzles fáciles
             puzzle = self._create_connected_distribution(puzzle, cells_to_remove)
-        elif difficulty == 'medio':
-            self.difficulty_level = random.randint(4, 6)
-            # Distribución media para puzzles intermedios
-            puzzle = self._create_medium_distribution(puzzle, cells_to_remove)
         else:  # dificil
             self.difficulty_level = random.randint(8, 10)
             # Distribución dispersa para puzzles difíciles
@@ -343,95 +339,4 @@ class SudokuBoard:
             result[row][col] = 0
             removed_positions.add(best_pos)
         
-        return result
-    
-    def _create_medium_distribution(self, puzzle, cells_to_remove):
-        """Crear distribución media: balance entre conectividad y dispersión"""
-        import copy
-        result = copy.deepcopy(puzzle)
-        
-        # ESTRATEGIA MEDIA: Combinación de clusters y dispersión
-        # Crear algunos clusters conectados y algunas celdas dispersas
-        
-        all_positions = [(i, j) for i in range(9) for j in range(9)]
-        random.shuffle(all_positions)
-        
-        removed_positions = []
-        
-        # Fase 1: Crear algunos clusters (60% de las remociones)
-        cluster_removals = int(cells_to_remove * 0.6)
-        blocks = [(r, c) for r in range(0, 9, 3) for c in range(0, 9, 3)]
-        random.shuffle(blocks)
-        
-        removed_in_clusters = 0
-        for block_r, block_c in blocks:
-            if removed_in_clusters >= cluster_removals:
-                break
-                
-            # En cada bloque, remover algunas celdas de forma semi-conectada
-            block_positions = [(block_r + i, block_c + j) 
-                             for i in range(3) for j in range(3)]
-            random.shuffle(block_positions)
-            
-            # Remover 4-6 celdas por bloque cuando le toque
-            to_remove_in_block = min(random.randint(4, 6), 
-                                   cluster_removals - removed_in_clusters,
-                                   len(block_positions))
-            
-            for i in range(to_remove_in_block):
-                if block_positions[i] not in removed_positions:
-                    removed_positions.append(block_positions[i])
-                    removed_in_clusters += 1
-        
-        # Fase 2: Dispersión controlada (40% restante)
-        dispersed_removals = cells_to_remove - len(removed_positions)
-        
-        for _ in range(dispersed_removals):
-            if len(removed_positions) >= cells_to_remove:
-                break
-                
-            # Encontrar posición que maximice dispersión moderada
-            best_pos = None
-            best_score = -1
-            
-            for pos in all_positions:
-                if pos in removed_positions:
-                    continue
-                
-                row, col = pos
-                
-                # Score de dispersión moderada
-                dispersión_score = 0
-                
-                # Penalizar cercanía a celdas ya removidas (menos que en difícil)
-                for removed_row, removed_col in removed_positions:
-                    distance = abs(row - removed_row) + abs(col - removed_col)
-                    if distance <= 1:  # Muy cerca
-                        dispersión_score -= 2
-                    elif distance <= 3:  # Moderadamente cerca
-                        dispersión_score -= 0.5
-                
-                # Bonus moderado por bordes
-                if row == 0 or row == 8 or col == 0 or col == 8:
-                    dispersión_score += 1
-                
-                # Componente aleatorio para variabilidad
-                dispersión_score += random.uniform(0, 1)
-                
-                if dispersión_score > best_score:
-                    best_score = dispersión_score
-                    best_pos = pos
-            
-            if best_pos:
-                removed_positions.append(best_pos)
-            else:
-                # Fallback: tomar cualquier posición disponible
-                available = [pos for pos in all_positions if pos not in removed_positions]
-                if available:
-                    removed_positions.append(random.choice(available))
-        
-        # Aplicar la remoción
-        for row, col in removed_positions:
-            result[row][col] = 0
-            
         return result

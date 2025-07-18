@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('.')
+
 from sudoku.advanced_difficulty import AdvancedDifficultySystem
 from sudoku.board import SudokuBoard
 

@@ -28,7 +28,7 @@ def test_three_difficulty_consistency():
     for test_num in range(5):
         print(f"\n=== Test {test_num + 1} ===")
         
-        for diff in ['facil', 'medio', 'dificil']:
+        for diff in ['facil', 'dificil']:
             print(f"\n--- Generando puzzle {diff.upper()} ---")
             
             board.generate_puzzle(diff)

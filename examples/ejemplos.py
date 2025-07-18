@@ -2,6 +2,9 @@
 Ejemplos de uso y documentación técnica del juego de Sudoku
 """
 
+import sys
+sys.path.append('.')
+
 # Ejemplo de uso básico
 from sudoku.board import SudokuBoard
 from sudoku.utils import SudokuValidator, SudokuHints

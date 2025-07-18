@@ -10,8 +10,13 @@ import copy
 import math
 from typing import List, Tuple, Dict, Set
 from collections import defaultdict
-from itertools import combinations
 from .board import SudokuBoard
+from itertools import permutations
+
+HIGH_DIFFICULTY_THRESHOLD = 5.7
+
+CELLS_TO_REMOVE_LOW_DIFFICULTY = 51
+CELLS_TO_REMOVE_HIGH_DIFFICULTY = 51
 
 class AdvancedDifficultySystem:
     """Sistema avanzado de dificultad con múltiples conceptos de matemáticas discretas"""
@@ -23,11 +28,11 @@ class AdvancedDifficultySystem:
         self.combinatorial_difficulty = 1
         self.final_difficulty = 1
         
-    def calculate_permutation_difficulty(self, board_matrix: List[List[int]]) -> int:
+    def calculate_difficulty(self, board_matrix: List[List[int]]) -> int:
         """Calcula la dificultad usando múltiples conceptos de matemáticas discretas"""
         
         # 1. DISTRIBUCIÓN DE NÚMEROS (1-9)
-        number_permutations = self._measure_number_distribution_uniformity(board_matrix)
+        number_distribution = self._measure_number_distribution_uniformity(board_matrix)
         
         # 2. PERMUTACIONES DE FILAS DENTRO DE BLOQUES
         row_permutations = self._analyze_row_permutations(board_matrix)
@@ -49,19 +54,20 @@ class AdvancedDifficultySystem:
         
         # Combinar todas las métricas con pesos matemáticamente justificados
         total_complexity = (
-            number_permutations * 0.25 +      # 25% - Permutaciones de números
-            row_permutations * 0.17 +         # 17% - Permutaciones de filas
-            col_permutations * 0.17 +         # 17% - Permutaciones de columnas
-            block_permutations * 0.11 +       # 11% - Permutaciones de bloques
+            number_distribution * 0.15 +      # 15% - Permutaciones de números
+            row_permutations * 0.15 +         # 15% - Permutaciones de filas
+            col_permutations * 0.15 +         # 15% - Permutaciones de columnas
+            block_permutations * 0.11 +       # 11% -  Permutaciones de bloques
             graph_complexity * 0.15 +         # 15% - Teoría de grafos
-            combinatorial_complexity * 0.15   # 15% - Combinatoria avanzada
+            combinatorial_complexity * 0.15 + # 15% - Combinatoria avanzada
+            solution_space * 0.14             # 14% - Espacio de solución
         )
-        
+
         # Convertir a escala 1-10 con rounding apropiado
         difficulty = max(1, min(10, round(total_complexity * 10, 1)))
         
         # Almacenar métricas individuales
-        self.permutation_difficulty = (number_permutations + row_permutations + col_permutations + block_permutations) / 4
+        self.permutation_difficulty = (number_distribution + row_permutations + col_permutations + block_permutations) / 4
         self.graph_difficulty = graph_complexity
         self.combinatorial_difficulty = combinatorial_complexity
         
@@ -130,7 +136,6 @@ class AdvancedDifficultySystem:
     
     def _analyze_block_permutations(self, board_matrix: List[List[int]]) -> float:
         """Analiza permutaciones válidas de bloques 3x3"""
-        from itertools import permutations
         
         # Extraer los 9 bloques 3x3
         blocks = []
@@ -171,24 +176,10 @@ class AdvancedDifficultySystem:
         # Las aristas conectan celdas que no pueden tener el mismo valor
         graph = self._build_constraint_graph()
         
-        # 1. Calcular grado promedio de los vértices
-        node_degrees = []
-        for i in range(9):
-            for j in range(9):
-                if board_matrix[i][j] == 0:  # Solo celdas vacías
-                    degree = len(graph[(i, j)])
-                    node_degrees.append(degree)
-        
-        avg_degree = sum(node_degrees) / len(node_degrees) if node_degrees else 0
-        
-        # 2. Calcular coeficiente de clustering (conectividad local)
+        # 1. Calcular coeficiente de clustering (conectividad local)
         clustering_coefficient = self._calculate_clustering_coefficient(graph, board_matrix)
         
-        # 3. Analizar componentes conexas de celdas vacías
-        empty_components = self._find_empty_cell_components(board_matrix)
-        component_complexity = len(empty_components) / 9.0  # Normalizar por máximo teórico
-        
-        # 4. Densidad del grafo de celdas vacías
+        # 2. Densidad del grafo de celdas vacías
         empty_cells = sum(row.count(0) for row in board_matrix)
         if empty_cells <= 1:
             graph_density = 0
@@ -198,13 +189,11 @@ class AdvancedDifficultySystem:
                              for i in range(9) for j in range(9) 
                              if board_matrix[i][j] == 0 for cell in [(i, j)]) / 2
             graph_density = actual_edges / max_edges if max_edges > 0 else 0
-        
+
         # Combinar métricas del grafo
         graph_complexity = (
-            (avg_degree / 20.0) * 0.3 +           # Grado promedio normalizado
-            clustering_coefficient * 0.3 +         # Coeficiente de clustering
-            component_complexity * 0.2 +           # Complejidad de componentes
-            graph_density * 0.2                    # Densidad del grafo
+            clustering_coefficient * 0.6 +         # Coeficiente de clustering
+            graph_density * 0.4                    # Densidad del grafo
         )
         
         return min(1.0, graph_complexity)
@@ -268,49 +257,6 @@ class AdvancedDifficultySystem:
             clustering_sum += local_clustering
         
         return clustering_sum / len(empty_cells) if empty_cells else 0.0
-    
-    def _find_empty_cell_components(self, board_matrix: List[List[int]]) -> List[List[Tuple[int, int]]]:
-        """Encuentra componentes conexas de celdas vacías"""
-        empty_cells = set()
-        for i in range(9):
-            for j in range(9):
-                if board_matrix[i][j] == 0:
-                    empty_cells.add((i, j))
-        
-        components = []
-        visited = set()
-        
-        def dfs(cell, component):
-            if cell in visited or cell not in empty_cells:
-                return
-            visited.add(cell)
-            component.append(cell)
-            
-            # Visitar celdas adyacentes (mismo constraint group)
-            i, j = cell
-            # Fila
-            for k in range(9):
-                if (i, k) != cell:
-                    dfs((i, k), component)
-            # Columna
-            for k in range(9):
-                if (k, j) != cell:
-                    dfs((k, j), component)
-            # Caja 3x3
-            box_start_row, box_start_col = 3 * (i // 3), 3 * (j // 3)
-            for r in range(box_start_row, box_start_row + 3):
-                for c in range(box_start_col, box_start_col + 3):
-                    if (r, c) != cell:
-                        dfs((r, c), component)
-        
-        for cell in empty_cells:
-            if cell not in visited:
-                component = []
-                dfs(cell, component)
-                if component:
-                    components.append(component)
-        
-        return components
     
     def _analyze_combinatorial_complexity(self, board_matrix: List[List[int]]) -> float:
         """COMBINATORIA: Análisis usando inclusión-exclusión y coeficientes binomiales"""
@@ -416,6 +362,7 @@ class AdvancedDifficultySystem:
         
         # Normalizar por máximo teórico
         max_binomial = len(empty_cells) * sum(math.comb(9, k) for k in range(1, 4))
+
         return binomial_sum / max_binomial if max_binomial > 0 else 0
     
     def _calculate_solution_space_complexity(self, board_matrix: List[List[int]]) -> float:
@@ -441,7 +388,6 @@ class AdvancedDifficultySystem:
         avg_branching = sum(branching_factors) / len(branching_factors)
         
         # Calcular complejidad logarítmica del espacio de búsqueda
-        import math
         search_space_log = empty_cells * math.log(avg_branching) if avg_branching > 1 else 0
         
         # Normalizar (máximo teórico: 81 celdas * log(9) ≈ 178)
@@ -449,7 +395,6 @@ class AdvancedDifficultySystem:
     
     def _count_valid_row_permutations(self, rows: List[List[int]], board: List[List[int]], start_row: int) -> int:
         """Cuenta permutaciones válidas de filas que mantienen validez del Sudoku"""
-        from itertools import permutations
         
         valid_count = 0
         for perm in permutations(range(3)):
@@ -466,7 +411,6 @@ class AdvancedDifficultySystem:
     
     def _count_valid_column_permutations(self, cols: List[List[int]], board: List[List[int]], start_col: int) -> int:
         """Cuenta permutaciones válidas de columnas que mantienen validez del Sudoku"""
-        from itertools import permutations
         
         valid_count = 0
         for perm in permutations(range(3)):
@@ -484,7 +428,6 @@ class AdvancedDifficultySystem:
     
     def _count_valid_block_permutations(self, blocks: List[List[int]], direction: str) -> int:
         """Cuenta permutaciones válidas de bloques 3x3"""
-        from itertools import permutations
         
         valid_count = 0
         for perm in permutations(range(3)):
@@ -566,9 +509,7 @@ class AdvancedDifficultySystem:
         # Determinar rangos objetivo según la clasificación
         # Ajustados para crear mayor contraste
         if target_difficulty == 'facil':
-            target_range = (1, 3.5)  # Puzzles fáciles
-        elif target_difficulty == 'medio':
-            target_range = (3.6, 6.5)  # Puzzles medios
+            target_range = (1, 6.5)  # Puzzles fáciles
         elif target_difficulty == 'dificil':
             target_range = (6.6, 10)  # Puzzles difíciles
         else:  # Default a facil
@@ -583,10 +524,10 @@ class AdvancedDifficultySystem:
             puzzle = self._create_puzzle_variation(complete_board, target_difficulty)
             
             # Calcular métricas de cada aspecto (1-10)
-            total_diff = self.calculate_permutation_difficulty(puzzle)
+            total_diff = self.calculate_difficulty(puzzle)
             
             # Clasificar según rangos ajustados para sistema de 2 niveles con mayor contraste
-            if total_diff <= 5.7:
+            if total_diff <= HIGH_DIFFICULTY_THRESHOLD:
                 classification = 'Fácil'
             else:
                 classification = 'Difícil'
@@ -610,9 +551,7 @@ class AdvancedDifficultySystem:
             if target_range[0] <= total_diff <= target_range[1]:
                 # Preferir puzzles más extremos dentro del rango
                 if target_difficulty == 'facil':
-                    score = 3.5 - total_diff  # Mientras menor, mejor para fácil
-                elif target_difficulty == 'medio':
-                    score = 10 - abs(total_diff - 5.0)  # Mientras más cerca del centro, mejor para medio
+                    score = 6.5 - total_diff  # Mientras menor, mejor para fácil
                 else:  # dificil
                     score = total_diff - 6.6  # Mientras mayor, mejor para difícil
                     
@@ -624,10 +563,10 @@ class AdvancedDifficultySystem:
         # Si no encontramos uno perfecto, usar el mejor
         if best_puzzle is None:
             puzzle = self._create_puzzle_variation(complete_board, target_difficulty)
-            total_diff = self.calculate_permutation_difficulty(puzzle)
+            total_diff = self.calculate_difficulty(puzzle)
             
             # Clasificar según rangos ajustados para sistema de 2 niveles con mayor contraste
-            if total_diff <= 5.7:
+            if total_diff <= HIGH_DIFFICULTY_THRESHOLD:
                 classification = 'Fácil'
             else:
                 classification = 'Difícil'
@@ -667,15 +606,12 @@ class AdvancedDifficultySystem:
         
         # Determinar cuántas celdas remover - MISMO NÚMERO para ambas dificultades
         # La dificultad vendrá de la DISTRIBUCIÓN, no de la cantidad
-        cells_to_remove = 81 - 30  # Siempre 30 celdas llenas
         
         # Diferentes estrategias de remoción según dificultad
         if target_difficulty == 'facil':
-            puzzle = self._create_easy_distribution(complete_board, cells_to_remove)
-        elif target_difficulty == 'medio':
-            puzzle = self._create_medium_distribution(complete_board, cells_to_remove)
+            puzzle = self._create_easy_distribution(complete_board, CELLS_TO_REMOVE_LOW_DIFFICULTY)
         else:  # dificil
-            puzzle = self._create_difficult_distribution(complete_board, cells_to_remove)
+            puzzle = self._create_difficult_distribution(complete_board, CELLS_TO_REMOVE_HIGH_DIFFICULTY)
             
         return puzzle
     
@@ -713,90 +649,6 @@ class AdvancedDifficultySystem:
         
         # 2. Aplicar la remoción manteniendo conectividad
         for row, col in positions_to_remove:
-            puzzle[row][col] = 0
-            
-        return puzzle
-    
-    def _create_medium_distribution(self, complete_board: List[List[int]], cells_to_remove: int) -> List[List[int]]:
-        """Crea distribución media: balance entre conexión y dispersión"""
-        puzzle = copy.deepcopy(complete_board)
-        
-        # ESTRATEGIA MEDIA: Mezcla de clusters conectados con algo de dispersión
-        # Mantiene algunas conexiones pero introduce desafíos moderados
-        
-        all_positions = [(r, c) for r in range(9) for c in range(9)]
-        random.shuffle(all_positions)
-        
-        removed_positions = []
-        
-        # Fase 1: Remover 60% de celdas con estrategia de clusters (similar a fácil)
-        phase1_removals = int(cells_to_remove * 0.6)
-        
-        # Estrategia de clusters por bloques 3x3
-        blocks = [(r, c) for r in range(0, 9, 3) for c in range(0, 9, 3)]
-        random.shuffle(blocks)
-        
-        removed_in_phase1 = 0
-        for block_r, block_c in blocks:
-            if removed_in_phase1 >= phase1_removals:
-                break
-                
-            block_positions = [(block_r + i, block_c + j) 
-                             for i in range(3) for j in range(3)]
-            random.shuffle(block_positions)
-            
-            # Remover 3-4 celdas por bloque (moderadamente conectado)
-            to_remove_in_block = min(4, phase1_removals - removed_in_phase1)
-            
-            for i in range(to_remove_in_block):
-                if removed_in_phase1 < phase1_removals:
-                    row, col = block_positions[i]
-                    removed_positions.append((row, col))
-                    removed_in_phase1 += 1
-        
-        # Fase 2: Remover 40% restante con estrategia de dispersión (similar a difícil)
-        phase2_removals = cells_to_remove - removed_in_phase1
-        
-        for _ in range(phase2_removals):
-            best_pos = None
-            best_score = -1
-            
-            for pos in all_positions:
-                if pos in removed_positions:
-                    continue
-                    
-                row, col = pos
-                dispersión_score = 0
-                
-                # Penalizar cercanía a celdas ya removidas
-                for removed_row, removed_col in removed_positions:
-                    distance = abs(row - removed_row) + abs(col - removed_col)
-                    if distance <= 2:
-                        dispersión_score -= 2  # Menos penalización que en difícil
-                    elif distance <= 3:
-                        dispersión_score -= 1
-                
-                # Bonus moderado por bordes
-                if row == 0 or row == 8 or col == 0 or col == 8:
-                    dispersión_score += 1
-                
-                # Componente aleatorio para variabilidad
-                dispersión_score += random.uniform(0, 1)
-                
-                if dispersión_score > best_score:
-                    best_score = dispersión_score
-                    best_pos = pos
-            
-            if best_pos:
-                removed_positions.append(best_pos)
-            else:
-                # Fallback
-                available = [pos for pos in all_positions if pos not in removed_positions]
-                if available:
-                    removed_positions.append(random.choice(available))
-        
-        # Aplicar la remoción
-        for row, col in removed_positions:
             puzzle[row][col] = 0
             
         return puzzle
@@ -873,7 +725,7 @@ class AdvancedDifficultySystem:
     def get_difficulty_metrics(self) -> Dict:
         """Obtiene las métricas de dificultad actuales"""
         # Clasificar según rangos ajustados para sistema de 2 niveles con mayor contraste
-        if self.final_difficulty <= 5.7:
+        if self.final_difficulty <= HIGH_DIFFICULTY_THRESHOLD:
             classification = 'Fácil'
         else:
             classification = 'Difícil'

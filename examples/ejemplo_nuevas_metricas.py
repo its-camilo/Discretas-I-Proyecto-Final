@@ -4,6 +4,9 @@ Ejemplo de las nuevas métricas de matemáticas discretas implementadas
 en el sistema de dificultad avanzado del Sudoku.
 """
 
+import sys
+sys.path.append('.')
+
 from sudoku.advanced_difficulty import AdvancedDifficultySystem
 import json
 

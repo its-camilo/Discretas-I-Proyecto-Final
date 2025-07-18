@@ -1,5 +1,8 @@
 """Test script para verificar el sistema de dificultad avanzado"""
 
+import sys
+sys.path.append('.')
+
 from sudoku.board import SudokuBoard
 from sudoku.advanced_difficulty import AdvancedDifficultySystem
 

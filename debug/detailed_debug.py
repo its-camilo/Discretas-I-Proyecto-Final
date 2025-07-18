@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('.')
+
 from sudoku.advanced_difficulty import AdvancedDifficultySystem
 import copy
 
@@ -22,7 +25,7 @@ def debug_calculate_difficulty(ads, puzzle, label):
     print(f"\n=== {label} ===")
     
     # Check individual components
-    number_perms = ads._analyze_number_permutations(puzzle)
+    number_perms = ads._measure_number_distribution_uniformity(puzzle)
     row_perms = ads._analyze_row_permutations(puzzle)
     col_perms = ads._analyze_column_permutations_perm(puzzle)
     block_perms = ads._analyze_block_permutations(puzzle)
