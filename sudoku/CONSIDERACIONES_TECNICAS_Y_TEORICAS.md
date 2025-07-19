@@ -148,9 +148,6 @@ Dificultad Final =
 ...(continúa con el resto del README.md)...
 ---
 
-
-## 2. REVISIÓN Y RESOLUCIÓN
-
 # REVISIÓN Y RESOLUCIÓN
 
 ## Sistema Avanzado de Verificación y Resolución de Sudoku
@@ -218,9 +215,6 @@ Este proyecto trasciende una implementación básica de Sudoku al incorporar her
 La integración de estos conceptos permite validar de forma rigurosa soluciones propuestas por el usuario y generar soluciones automáticamente, asegurando coherencia matemática en todo momento.
 
 ---
-
-## 3. Implementación Avanzada de Permutaciones en Sudoku
-
 
 # Implementación Avanzada de Permutaciones en Sudoku: Creación del Tablero
 
