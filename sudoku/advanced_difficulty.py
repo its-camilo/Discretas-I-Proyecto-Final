@@ -520,7 +520,7 @@ class AdvancedDifficultySystem:
         best_final_difficulty = 0
         
         # Intentar múltiples variaciones
-        for attempt in range(100):  # Aumentado de 30 a 100 para mejor cobertura
+        for attempt in range(100):  # 100 para una muy buena cobertura
             puzzle = self._create_puzzle_variation(complete_board, target_difficulty)
             
             # Calcular métricas de cada aspecto (1-10)
@@ -619,13 +619,9 @@ class AdvancedDifficultySystem:
         """Crea distribución fácil: celdas conectadas y agrupadas"""
         puzzle = copy.deepcopy(complete_board)
         
-        # ESTRATEGIA FÁCIL: Crear clusters conectados de celdas llenas
-        # Esto permite técnicas de resolución secuencial y lógica simple
-        
         # 1. Mantener bloques 3x3 relativamente completos
         positions_to_remove = []
         
-        # Priorizar remoción que mantenga conectividad
         for block_row in range(3):
             for block_col in range(3):
                 block_positions = []
@@ -634,7 +630,6 @@ class AdvancedDifficultySystem:
                         block_positions.append((r, c))
                 
                 # En cada bloque, quitar aproximadamente 5-6 celdas (dejar 3-4)
-                # pero mantener las que quedan conectadas
                 random.shuffle(block_positions)
                 
                 # Quitar las primeras 5-6 posiciones de cada bloque
@@ -647,7 +642,7 @@ class AdvancedDifficultySystem:
                     
                 positions_to_remove.extend(block_positions[:cells_this_block])
         
-        # 2. Aplicar la remoción manteniendo conectividad
+        # 2. Aplicar la remoción
         for row, col in positions_to_remove:
             puzzle[row][col] = 0
             
