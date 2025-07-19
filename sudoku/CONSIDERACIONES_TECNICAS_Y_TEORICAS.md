@@ -145,7 +145,129 @@ Dificultad Final =
 
 ## Escala de Dificultad: ¿Qué Significa Cada Nivel?
 
-...(continúa con el resto del README.md)...
+### 🟢 Fácil (1-3 puntos)
+**Características del puzzle:**
+- Números bien distribuidos (cada uno aparece 3-4 veces)
+- Distribución conectada con clusters agrupados
+- Celdas vacías organizadas en bloques cohesivos
+- Exactamente 30 celdas llenas (51 vacías)
+- Patrones que permiten resolución secuencial
+
+**Tu experiencia como jugador:**
+- Progreso constante y predecible
+- Decisiones mayormente obvias
+- Raramente te sientes "atascado"
+- Técnicas básicas (naked singles, hidden singles) son suficientes
+- Sensación de flujo continuo
+- Las pistas están estratégicamente agrupadas para facilitar el análisis
+
+### 🟡 Medio (4-6 puntos)
+**Características del puzzle:**
+- Distribución balanceada: 60% clusters conectados + 40% dispersión controlada
+- Estructura semi-flexible con algunas interconexiones
+- Exactamente 30 celdas llenas (51 vacías)
+- Combina áreas fáciles con secciones que requieren más análisis
+- Balance entre patrones obvios y desafíos moderados
+
+**Tu experiencia como jugador:**
+- Progreso variable: algunas secciones fluyen, otras requieren pausa
+- Mezcla de decisiones obvias con algunas que requieren análisis
+- Ocasionalmente necesitarás técnicas intermedias
+- Buen nivel para practicar transición entre técnicas básicas y avanzadas
+- Sensación de desafío controlado y progresión educativa
+
+### 🔴 Difícil (8-10 puntos)
+**Características del puzzle:**
+- Distribución maximizada en dispersión y desconexión
+- Celdas llenas estratégicamente aisladas unas de otras
+- Exactamente 30 celdas llenas (51 vacías)
+- Alta desconexión entre regiones del tablero
+- Patrones que requieren análisis global y pensamiento sistémico
+
+**Tu experiencia como jugador:**
+- Requiere análisis profundo y sistemático
+- Muchas decisiones no son obvias
+- Necesitas técnicas avanzadas (X-Wing, Swordfish, forcing chains)
+- Frecuentes "callejones sin salida" que requieren backtracking
+- Sensación de resolver un rompecabezas complejo, no solo rellenar números
+- Las pistas dispersas requieren constante reevaluación de todo el tablero
+
+## Ejemplos Prácticos de Cada Métrica
+
+### 📊 Ejemplo: Distribución de Números
+```
+🟢 Puzzle Fácil (Clusters Conectados):
+1: ████ (4 veces)    4: ███ (3 veces)     7: ███ (3 veces)
+2: ███ (3 veces)     5: ████ (4 veces)    8: ███ (3 veces)  
+3: ███ (3 veces)     6: ███ (3 veces)     9: ████ (4 veces)
+└─ Distribución agrupada = Patrones fáciles de seguir
+
+🟡 Puzzle Medio (Balance Híbrido):
+1: ███ (3 veces)     4: ████ (4 veces)    7: ███ (3 veces)
+2: ████ (4 veces)    5: ███ (3 veces)     8: ████ (4 veces)
+3: ███ (3 veces)     6: ███ (3 veces)     9: ███ (3 veces)
+└─ Distribución semi-balanceada = Requiere análisis moderado
+
+🔴 Puzzle Difícil (Máxima Dispersión):  
+1: ██████ (6 veces)  4: █ (1 vez)         7: ██ (2 veces)
+2: █ (1 vez)         5: ██████ (6 veces)  8: █ (1 vez)
+3: ██ (2 veces)      6: ████ (4 veces)    9: ███████ (7 veces)
+└─ Distribución completamente dispersa = Análisis global requerido
+```
+
+### 🕸️ Ejemplo: Patrones de Conectividad
+```
+🟢 Distribución Conectada (Fácil):
+┌─────┬─────┬─────┐
+│ X X │ . . │ . . │  ← Clusters agrupados permiten
+│ X . │ X X │ . . │    resolución secuencial por
+│ . . │ X . │ X X │    bloques cohesivos
+├─────┼─────┼─────┤
+│ X X │ . . │ X . │
+│ . X │ X X │ X . │
+│ . . │ X . │ . X │
+
+🟡 Distribución Balanceada (Medio):
+┌─────┬─────┬─────┐
+│ X . │ X . │ . X │  ← Combinación de clusters
+│ . X │ . . │ X . │    con algunas celdas
+│ X . │ X X │ . . │    estratégicamente dispersas
+├─────┼─────┼─────┤
+│ . X │ . X │ X . │
+│ X . │ X . │ . X │
+│ . . │ . X │ X . │
+
+🔴 Distribución Dispersa (Difícil):
+┌─────┬─────┬─────┐
+│ . X │ . . │ X . │  ← Celdas altamente dispersas
+│ X . │ . X │ . . │    requieren análisis global
+│ . . │ X . │ . X │    constante y pensamiento
+├─────┼─────┼─────┤    sistémico
+│ X . │ . . │ . X │
+│ . . │ X . │ X . │
+│ . X │ . X │ . . │
+```
+
+### 🎲 Ejemplo: Análisis de Complejidad por Nivel
+```
+🟢 Estrategia Fácil:
+- Buscar clusters conectados
+- Resolver bloques 3x3 independientemente  
+- Usar patrones obvios dentro de cada grupo
+- Progresión lineal: Bloque A → Bloque B → Bloque C
+
+🟡 Estrategia Medio:
+- Alternar entre clusters y análisis de dispersión
+- Combinar técnicas básicas con eliminación moderada
+- Evaluar consecuencias entre bloques relacionados
+- Progresión variable: resolver fácil → analizar difícil → resolver fácil
+
+🔴 Estrategia Difícil:
+- Análisis global constante de todo el tablero
+- Técnicas avanzadas: forcing chains, pattern overlay
+- Cada decisión afecta múltiples regiones
+- Progresión no-lineal: requiere backtracking y reevaluación continua
+```
 ---
 
 # REVISIÓN Y RESOLUCIÓN
