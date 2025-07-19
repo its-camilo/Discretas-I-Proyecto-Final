@@ -6,7 +6,7 @@
 
 1. [Sistema de Dificultad - Sudoku](#sistema-de-dificultad---sudoku)
 2. [Revisión y Resolución](#revisión-y-resolución)
-3. [Implementación Avanzada de Permutaciones en Sudoku](#implementación-avanzada-de-permutaciones-en-sudoku)
+3. [Implementación Avanzada de Permutaciones en Sudoku](#implementación-avanzada-de-permutaciones-en-sudoku-creación-del-tablero)
 
 ---
 
