@@ -90,10 +90,7 @@ class SudokuBoard:
     def generate_puzzle(self, difficulty: str = 'facil') -> Tuple[List[List[int]], int]:
         """Genera un puzzle usando el sistema avanzado o básico"""
         
-        if self.use_advanced_difficulty:
-            return self.generate_advanced_puzzle(difficulty)
-        else:
-            return self.generate_basic_puzzle(difficulty)
+        return self.generate_advanced_puzzle(difficulty)
     
     def generate_advanced_puzzle(self, difficulty: str = 'facil') -> Tuple[List[List[int]], int]:
         """Genera un puzzle con sistema avanzado de dificultad"""
@@ -118,34 +115,6 @@ class SudokuBoard:
         }
         
         return puzzle, final_difficulty
-    
-    def generate_basic_puzzle(self, difficulty: str = 'facil') -> Tuple[List[List[int]], int]:
-        """Genera un puzzle con sistema básico de dificultad"""
-        
-        # Generar tablero completo
-        complete_board = self.generate_complete_board()
-        self.solution = copy.deepcopy(complete_board)
-        
-        # Crear puzzle removiendo números
-        puzzle = copy.deepcopy(complete_board)
-        
-        # NUEVO SISTEMA: Misma cantidad de celdas, diferente distribución
-        cells_to_remove = 81 - 30  # Siempre 30 celdas llenas
-        
-        # Determinar dificultad basada en distribución, no cantidad
-        if difficulty == 'facil':
-            self.difficulty_level = random.randint(1, 3)
-            # Distribución conectada para puzzles fáciles
-            puzzle = self._create_connected_distribution(puzzle, cells_to_remove)
-        else:  # dificil
-            self.difficulty_level = random.randint(8, 10)
-            # Distribución dispersa para puzzles difíciles
-            puzzle = self._create_dispersed_distribution(puzzle, cells_to_remove)
-        
-        self.board = copy.deepcopy(puzzle)
-        self.initial_board = copy.deepcopy(puzzle)
-        
-        return puzzle, self.difficulty_level
     
     def get_cell_value(self, row: int, col: int) -> int:
         """Obtiene el valor de una celda"""
