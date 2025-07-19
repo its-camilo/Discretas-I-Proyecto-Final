@@ -210,9 +210,9 @@ total_complexity = (
 
 # REVISIÓN Y RESOLUCIÓN
 
-## Sistema Avanzado de Verificación y Resolución de Sudoku
+## Sistema avanzado de verificación y resolución de Sudoku
 
-**Basado en Permutaciones y Teoría de Grafos**
+**Basado en permutaciones y teoría de grafos**
 
 Este módulo implementa la verificación de soluciones propuestas por el usuario y la resolución automática de tableros incompletos, utilizando principios de Matemáticas Discretas. Las principales herramientas teóricas aplicadas son Permutaciones y Coloreo de Grafos.
 
@@ -220,11 +220,11 @@ Este módulo implementa la verificación de soluciones propuestas por el usuario
 
 ### 🧠 Fundamento Matemático
 
-#### 1. Permutaciones (Grupos Simétricos)
+#### 1. Permutaciones
 Cada fila, columna y región 3×3 en un tablero de Sudoku debe contener una permutación del conjunto {1, 2, ..., 9}, es decir, todos los números sin repeticiones. Esta propiedad se verifica en la resolución y validación.
 
-- **Verificación de usuario:** Se analiza si las filas, columnas y regiones son permutaciones válidas.
-- **Resolución automática:** El algoritmo explora el espacio de permutaciones posibles bajo restricciones locales (vecinos), usando backtracking optimizado.
+- **Verificación de la solución:** se analiza si las filas, columnas y regiones son permutaciones válidas.
+- **Resolución automática:** el algoritmo explora el espacio de permutaciones posibles bajo restricciones locales (vecinos), usando backtracking optimizado.
 
 #### 2. Coloreo de Grafos (Teoría de Grafos)
 El tablero de Sudoku se modela como un grafo de restricciones, donde:
@@ -240,7 +240,7 @@ El tablero de Sudoku se modela como un grafo de restricciones, donde:
 #### ✅ Verificación de Soluciones (Entrada del Usuario)
 - Verifica que no se repitan valores en las filas, columnas ni regiones 3×3.
 - Utiliza la estructura de grafo para comprobar que cada nodo tiene un color distinto a sus vecinos (coloración propia).
-- La función `verificar_coloracion_propia(i, j)` evalúa si un valor asignado a la casilla (i, j) cumple con las restricciones del grafo de Sudoku.
+- La función `is_proper_coloring_at(board, row, col, num)` evalúa si un valor asignado a la casilla (row, col) cumple con las restricciones del grafo de Sudoku.
 
 #### 🤖 Resolución Automática
 - Emplea backtracking con heurísticas de reducción del espacio de búsqueda basado en vecinos.
@@ -253,95 +253,51 @@ El tablero de Sudoku se modela como un grafo de restricciones, donde:
 
 ```python
 class SudokuBoard:
+
+    """Otras funciones"""
+
     def get_neighbors(self, row, col) -> Set[Tuple[int, int]]:
         # Retorna los vecinos según el grafo de restricciones del Sudoku
 
-    def verificar_coloracion_propia(self, row, col, value) -> bool:
+    def is_proper_coloring_at(self, board, row, col, num) -> bool:
         # Verifica si el valor en la posición (row, col) es válido según sus vecinos
 
-    def solve(self) -> bool:
-        # Algoritmo de resolución automática basado en DFS y validación por coloración
+    def solve_backtracking(self) -> bool:
+        # Algoritmo de resolución automática y validación por coloración
+
+    def verify_solution(self) -> List[List[bool]]:
+        # Verifica que la solución del Sudoku sea correcta
+
+    def solve_current_board(self):
+        # Resuelve el Sudoku
+        
+    """Otras funciones"""
 ```
 
 ---
 
-### 📚 Conclusión
+# Implementación avanzada de permutaciones en el Sudoku: Creación del tablero
 
-Este proyecto trasciende una implementación básica de Sudoku al incorporar herramientas fundamentales de Matemáticas Discretas:
-
-- **Permutaciones:** para validar conjuntos sin repeticiones.
-- **Teoría de grafos:** para modelar restricciones y aplicar una coloración propia eficiente.
-
-La integración de estos conceptos permite validar de forma rigurosa soluciones propuestas por el usuario y generar soluciones automáticamente, asegurando coherencia matemática en todo momento.
-
----
-
-# Implementación Avanzada de Permutaciones en Sudoku: Creación del Tablero
-
-## ¿Por qué las Permutaciones son Clave en la Creación de un Tablero de Sudoku?
+## ¿Por qué las permutaciones son clave en la creación de un tablero de Sudoku?
 
 La esencia matemática de un tablero de Sudoku resuelto es la existencia de permutaciones válidas en cada fila, columna y bloque 3x3. Para construir un tablero inicial, el sistema explora el espacio de todas las posibles disposiciones (permutaciones) de los números del 1 al 9, asegurando que se cumplan las restricciones del juego.
 
-## Algoritmo de Backtracking y Permutaciones
+## Algoritmo Backtracking y permutaciones
 
 El método más utilizado para crear un tablero válido es el **backtracking**, que explora sistemáticamente las permutaciones posibles:
 
-1. **Selección de Celdas Vacías:** El algoritmo recorre el tablero buscando la siguiente celda vacía.
-2. **Cálculo de Candidatos:** Para cada celda, se calcula el conjunto de números que pueden ser colocados sin violar las reglas de permutación en su fila, columna y bloque.
-3. **Permutación Aleatoria:** Antes de probar los candidatos, se barajan aleatoriamente para generar variedad en los tableros resultantes.
-4. **Colocación y Recursión:** Se coloca un candidato y se avanza recursivamente a la siguiente celda. Si no hay candidatos válidos, se retrocede (backtrack) y se prueba otra permutación.
+1. **Selección de celdas vacías:** el algoritmo recorre el tablero buscando la siguiente celda vacía.
+2. **Cálculo de candidatos:** para cada celda, se calcula el conjunto de números que pueden ser colocados sin violar las reglas de permutación en su fila, columna y bloque.
+3. **Permutación aleatoria:** antes de probar los candidatos, se barajan aleatoriamente para generar variedad en los tableros resultantes.
+4. **Colocación y recursión:** se coloca un candidato y se avanza recursivamente a la siguiente celda. Si no hay candidatos válidos, se retrocede (backtrack) y se prueba otra permutación.
 
 Este proceso se repite hasta que el tablero esté completamente lleno y todas las filas, columnas y bloques sean permutaciones válidas del conjunto {1,2,...,9}.
 
-### Ejemplo de Pseudocódigo
-
-```python
-def solve_sudoku_backtracking(board):
-    find_empty = find_empty_cell(board)
-    if not find_empty:
-        return True # Tablero resuelto
-
-    row, col = find_empty
-    possible_numbers = list(range(1, 10))
-    random.shuffle(possible_numbers)
-
-    for num in possible_numbers:
-        if is_valid(board, num, (row, col)):
-            board[row][col] = num
-            if solve_sudoku_backtracking(board):
-                return True
-            board[row][col] = 0 # Backtrack
-
-    return False
-```
-
-## Variedad y Aleatorización
+## Variedad y aleatorización
 
 La aleatorización de las permutaciones permite que cada tablero generado sea único. El uso de `random.shuffle()` en los candidatos de cada celda asegura que el proceso de generación no siga siempre el mismo patrón, aumentando la diversidad de puzzles posibles.
 
-## Conclusión
-
-La creación de un tablero de Sudoku es, en esencia, un problema de permutaciones restringidas. El algoritmo de backtracking explora el espacio de todas las disposiciones posibles, asegurando que cada unidad del tablero sea una permutación válida. Este enfoque matemático garantiza tableros robustos y variados, fundamentales para la calidad y dificultad del juego.
 
 ### Referencias
 
-[1] Becerra Tomé, A., Núñez Valdés, J., & Perea Gonzáles, J. M. (2016). Juegos y Rarezas Matemáticas ¿Cuánta Matemática hay en los sudokus?. Pensamiento Matemático, 6 (1), 113-136.
-[4] Felgenhauer, B., & Jarvis, F. (2005). Enumerating possible Sudoku grids. Recuperado de: http://www.afjarvis...
-
----
-
-## ¿Cómo se Usan las Permutaciones para Construir y Validar el Sudoku?
-
-### Introducción
-
-En el corazón de cada puzzle de Sudoku yace el concepto matemático de las permutaciones. Una permutación es simplemente una disposición de un conjunto de elementos en un orden particular. En el contexto del Sudoku, esto se traduce en la disposición única de los números del 1 al 9 en cada fila, columna y bloque de $3 \times 3$. Entender cómo se gestionan y se verifican estas permutaciones es fundamental para el desarrollo de un juego de Sudoku robusto.
-
-### Pilares de la Implementación de Permutaciones
-
-Nuestra implementación utiliza las permutaciones en dos frentes principales: la **generación de tableros válidos** y la **validación de jugadas**.
-
-... (continúa con todo el contenido de PERMUTACIONES.md hasta el final) ...
-
----
-
-*Este documento reúne y organiza todas las consideraciones técnicas y teóricas del sistema avanzado de Sudoku implementado en este proyecto.*
+[1] R. Saavedra Hernandez, "Sudoku, aspectos matemáticos," TFG, Universidad de La Laguna, 2018. [Online]. Available: https://riull.ull.es/xmlui/bitstream/handle/915/13479/Sudoku,+aspectos+matematicos.pdf?sequence=1
