@@ -12,13 +12,13 @@
 
 # Sistema de Dificultad - Sudoku
 
-## ¿Cómo Influyen las Matemáticas Discretas en la Dificultad del Sudoku?
+## ¿Cómo influyen las Matemáticas Discretas en la dificultad del Sudoku?
 
 ### Introducción para Jugadores de Sudoku
 
-Si juegas Sudoku regularmente, sabes que algunos puzzles son más difíciles que otros. Pero **¿qué hace exactamente que un Sudoku sea más difícil?** Este sistema usa conceptos matemáticos avanzados para medir objetivamente la dificultad, analizando aspectos del puzzle que afectan directamente tu experiencia como jugador.
+Si juegas Sudoku regularmente, sabes que algunos puzzles son más difíciles que otros; pero **¿qué hace exactamente que un Sudoku sea más difícil?** Este sistema usa conceptos matemáticos avanzados para medir objetivamente la dificultad, analizando aspectos del puzzle que afectan directamente tu experiencia como jugador.
 
-### ¿Por Qué Usar Matemáticas para Medir Dificultad?
+### ¿Por qué usar Matemáticas Discretas para medir la dificultad?
 
 Cuando resuelves un Sudoku, tu cerebro está haciendo inconscientemente:
 - **Análisis de patrones** (permutaciones)
@@ -28,185 +28,193 @@ Cuando resuelves un Sudoku, tu cerebro está haciendo inconscientemente:
 
 Este sistema **matematiza** estos procesos mentales para predecir qué tan difícil será un puzzle para el jugador promedio.
 
-## Métricas de Dificultad: ¿Qué Miden y Cómo Afectan tu Experiencia?
+## Métricas de Dificultad: ¿Qué miden y cómo afectan tu experiencia?
 
-### 🎯 1. Análisis de Permutaciones (35% del peso total)
+### 🎯 1. Análisis de Permutaciones (56% del peso total)
 *"¿Qué tan predecibles son los patrones del puzzle?"*
 
-#### 📊 Permutaciones de Números (20% del peso)
+#### 📊 Distribución de números (15% del peso)
 **¿Qué mide?** La distribución de los números 1-9 en el tablero inicial.
 
 **¿Cómo afecta la dificultad?**
-- **MAYOR dificultad** cuando los números están distribuidos de forma **irregular**
-  - Ejemplo: Si tienes muchos 7s pero pocos 3s, tu cerebro tiene menos patrones consistentes para seguir
-  - Es como intentar resolver un rompecabezas donde algunas piezas son más abundantes que otras
-- **MENOR dificultad** cuando los números aparecen de forma **equilibrada**
-  - Cada número del 1-9 aparece aproximadamente la misma cantidad de veces
-  - Tu cerebro puede desarrollar estrategias consistentes para cada número
+- **MAYOR dificultad** cuando los números están distribuidos de forma **irregular**.
+  - Ejemplo: si tienes muchos 7s pero pocos 3s, tu cerebro tiene menos patrones consistentes para seguir.
+  - Es como intentar resolver un rompecabezas donde algunas piezas son más abundantes que otras.
+- **MENOR dificultad** cuando los números aparecen de forma **equilibrada**.
+  - Cada número del 1-9 aparece aproximadamente la misma cantidad de veces.
+  - Tu cerebro puede desarrollar estrategias consistentes para cada número.
 
-**En la práctica:** Un Sudoku con distribución irregular te hará sentir que "algunos números son imposibles de encontrar" mientras que otros "aparecen por todas partes".
+**En la práctica:** un Sudoku con distribución irregular te hará sentir que "algunos números son imposibles de encontrar" mientras que otros "aparecen por todas partes".
 
-#### 🔄 Permutaciones de Filas y Columnas (15% cada uno)
+#### 🔄 Permutaciones de filas y columnas (15% cada uno)
 **¿Qué mide?** Cuántas formas válidas hay de reorganizar filas/columnas dentro de cada bloque 3×3.
 
 **¿Cómo afecta la dificultad?**
-- **MAYOR dificultad** cuando hay **pocas** reorganizaciones válidas
-  - El puzzle tiene una estructura muy rígida
-  - Cada fila/columna debe estar exactamente donde está
-  - No hay "flexibilidad" para errores o aproximaciones
-- **MENOR dificultad** cuando hay **muchas** reorganizaciones válidas
-  - Múltiples patrones funcionales
-  - Más tolerancia a enfoques diferentes
-  - Varias "rutas" para llegar a la solución
+- **MAYOR dificultad** cuando hay **pocas** reorganizaciones válidas.
+  - El puzzle tiene una estructura muy rígida.
+  - Cada fila/columna debe estar exactamente donde está.
+  - No hay "flexibilidad" para errores o aproximaciones.
+- **MENOR dificultad** cuando hay **muchas** reorganizaciones válidas.
+  - Múltiples patrones funcionales.
+  - Más tolerancia a enfoques diferentes.
+  - Varias "rutas" para llegar a la solución.
 
-**En la práctica:** Si el puzzle tiene alta rigidez estructural, sentirás que "solo hay una forma correcta" de proceder en cada paso.
+**En la práctica:** si el puzzle tiene alta rigidez estructural, sentirás que "solo hay una forma correcta" de proceder en cada paso.
 
-#### 📦 Permutaciones de Bloques (10% del peso)
+#### 📦 Permutaciones de bloques (11% del peso)
 **¿Qué mide?** La flexibilidad para reorganizar bloques 3×3 completos.
 
 **¿Cómo afecta la dificultad?**
-- **MAYOR dificultad** cuando los bloques están **fuertemente interconectados**
-  - Cambiar algo en un bloque afecta inmediatamente a otros
-  - Requiere pensamiento global constante
-- **MENOR dificultad** cuando los bloques son más **independientes**
-  - Puedes enfocarte en un área sin preocuparte tanto por el resto
-  - Estrategia de "divide y vencerás" más efectiva
+- **MAYOR dificultad** cuando los bloques están **fuertemente interconectados**.
+  - Cambiar algo en un bloque afecta inmediatamente a otros.
+  - Requiere pensamiento global constante.
+- **MENOR dificultad** cuando los bloques son más **independientes**.
+  - Puedes enfocarte en un área sin preocuparte tanto por el resto.
+  - Estrategia de "divide y vencerás" más efectiva.
 
-**En la práctica:** Alta interconexión significa que "tocar una celda aquí arruina todo lo que hice allá".
+**En la práctica:** alta interconexión significa que "tocar una celda aquí arruina todo lo que hice allá".
 
-### 🕸️ 2. Teoría de Grafos (15% del peso total)
+### 🕸️ 2. Teoría de grafos (15% del peso total)
 *"¿Qué tan conectado está el puzzle?"*
 
 **¿Qué mide?** Las conexiones y relaciones entre todas las celdas del Sudoku.
 
 **¿Cómo afecta la dificultad?**
-- **MAYOR dificultad** cuando las celdas vacías están **altamente conectadas**
-  - Muchas celdas vacías se afectan mutuamente
-  - Cada decisión tiene consecuencias en cascada
-  - Difícil encontrar un "punto de entrada" seguro
-- **MENOR dificultad** cuando hay **grupos aislados** de celdas vacías
-  - Puedes resolver secciones independientemente
-  - Menos "efecto dominó" entre decisiones
+- **MAYOR dificultad** cuando las celdas vacías están **altamente conectadas**.
+  - Muchas celdas vacías se afectan mutuamente.
+  - Cada decisión tiene consecuencias en cascada.
+  - Difícil encontrar un "punto de entrada" seguro.
+- **MENOR dificultad** cuando hay **grupos aislados** de celdas vacías.
+  - Puedes resolver secciones independientemente.
+  - Menos "efecto dominó" entre decisiones.
   - Múltiples puntos de entrada al puzzle
 
 **En la práctica:** 
 - Alta conectividad = "Cada número que pongo cambia todo el puzzle"
 - Baja conectividad = "Puedo resolver esta esquina sin afectar el resto"
 
-### 🧮 3. Combinatoria Avanzada (15% del peso total)
+### 🧮 3. Combinatoria avanzada (15% del peso total)
 *"¿Cuántas opciones tienes que considerar?"*
 
-#### 🎲 Principio de Inclusión-Exclusión
+#### 🎲 Principio de inclusión-exclusión
 **¿Qué mide?** Cuántos candidatos comparten las celdas relacionadas.
 
 **¿Cómo afecta la dificultad?**
-- **MAYOR dificultad** cuando hay **muchos candidatos compartidos**
-  - Múltiples celdas pueden tener los mismos números posibles
-  - Difícil decidir dónde va cada número
-  - Requiere análisis profundo de eliminación
-- **MENOR dificultad** cuando los candidatos son **únicos por área**
-  - Cada celda tiene opciones diferentes y claras
-  - Decisiones más directas y evidentes
+- **MAYOR dificultad** cuando hay **muchos candidatos compartidos**.
+  - Múltiples celdas pueden tener los mismos números posibles.
+  - Difícil decidir dónde va cada número.
+  - Requiere análisis profundo de eliminación.
+- **MENOR dificultad** cuando los candidatos son **únicos por área**.
+  - Cada celda tiene opciones diferentes y claras.
+  - Decisiones más directas y evidentes.
 
-**En la práctica:** Muchos candidatos compartidos = "Este 5 puede ir en tres lugares diferentes y no sé cuál elegir".
+**En la práctica:** muchos candidatos compartidos = "Este 5 puede ir en tres lugares diferentes y no sé cuál elegir".
 
-#### 🔢 Coeficientes Binomiales
+#### 🔢 Coeficientes binomiales
 **¿Qué mide?** La complejidad de elegir entre múltiples candidatos por celda.
 
 **¿Cómo afecta la dificultad?**
-- **MAYOR dificultad** cuando las celdas tienen **muchas opciones** (4-9 candidatos)
-  - Cada celda requiere análisis extenso
-  - Alto potencial para errores de elección
-  - Necesitas técnicas avanzadas (naked pairs, hidden singles, etc.)
-- **MENOR dificultad** cuando las celdas tienen **pocas opciones** (1-3 candidatos)
-  - Decisiones más obvias y directas
-  - Menos posibilidad de error
-  - Estrategias básicas son suficientes
+- **MAYOR dificultad** cuando las celdas tienen **muchas opciones** (4-9 candidatos).
+  - Cada celda requiere análisis extenso.
+  - Alto potencial para errores de elección.
+  - Necesitas técnicas avanzadas (naked pairs, hidden singles, etc.).
+- **MENOR dificultad** cuando las celdas tienen **pocas opciones** (1-3 candidatos).
+  - Decisiones más obvias y directas.
+  - Menos posibilidad de error.
+  - Estrategias básicas son suficientes.
 
-**En la práctica:** Muchas opciones = "Esta celda puede ser 2, 4, 6, 7 u 8... ¿por dónde empiezo?"
+**En la práctica:** muchas opciones = "Esta celda puede ser 2, 4, 6, 7 u 8... ¿por dónde empiezo?"
 
-### ⚖️ Fórmula Final: ¿Cómo Se Combina Todo?
+#### 📈 Entropía combinatorial
+**¿Qué mide?** La cantidad de incertidumbre o desorden en la distribución de candidatos por celda en el tablero.
+
+**¿Cómo afecta la dificultad?**
+- **MAYOR dificultad** cuando la entropía es **alta**.
+  - Los candidatos están distribuidos de forma muy desigual y caótica.
+  - El jugador debe analizar muchas combinaciones posibles y el tablero se siente impredecible.
+- **MENOR dificultad** cuando la entropía es **baja**.
+  - Los candidatos están organizados y el tablero tiene patrones claros.
+  - El jugador puede seguir estrategias más directas y predecibles.
+
+**En la práctica:** alta entropía significa que "cada celda parece tener opciones muy diferentes y no hay un patrón claro para avanzar", mientras que baja entropía facilita la resolución por patrones y agrupaciones.
+
+#### 🧩 Espacio de solución (14% del peso)
+**¿Qué mide?** El número total de soluciones posibles para el tablero dado.
+
+**¿Cómo afecta la dificultad?**
+- **MAYOR dificultad** cuando el espacio de solución es **muy grande**.
+  - Hay muchas formas de completar el tablero, lo que puede generar ambigüedad y requerir técnicas avanzadas para descartar soluciones incorrectas.
+  - El jugador puede sentirse perdido ante tantas posibilidades.
+- **MENOR dificultad** cuando el espacio de solución es **muy pequeño** (idealmente, solo una solución).
+  - El camino hacia la solución es más claro y directo.
+  - El jugador puede avanzar con mayor seguridad, sabiendo que cada decisión lo acerca a la única solución posible.
+
+**En la práctica:** un espacio de solución grande puede hacer que el puzzle se sienta "abierto" y requiera más análisis, mientras que un espacio pequeño da una sensación de control y progresión lógica.
+
+### ⚖️ Fórmula Final: ¿Cómo se combina todo?
 
 ```
-Dificultad Final = 
-  25% × Distribución de Números +
-  17% × Rigidez de Filas +
-  17% × Rigidez de Columnas +
-  11% × Interconexión de Bloques +
-  15% × Conectividad General +
-  15% × Complejidad de Elecciones
+total_complexity = (
+    number_distribution * 0.15 +      # 15% - Distribución de numeros
+    row_permutations * 0.15 +         # 15% - Permutaciones de filas
+    col_permutations * 0.15 +         # 15% - Permutaciones de columnas
+    block_permutations * 0.11 +       # 11% - Permutaciones de bloques
+    graph_complexity * 0.15 +         # 15% - Teoría de grafos
+    combinatorial_complexity * 0.15 + # 15% - Combinatoria avanzada
+    solution_space * 0.14             # 14% - Espacio de solución
+)
 ```
 
 **¿Por qué estos pesos?**
-- **Distribución de números (25%)**: Es lo primero que notas al mirar el puzzle
-- **Estructura de filas/columnas (45% total)**: Determina tu estrategia básica de resolución
-- **Conectividad (15%)**: Afecta qué tan "enredado" se siente el puzzle
-- **Complejidad de elecciones (15%)**: Determina cuánto tienes que pensar por cada movimiento
+- **Distribución de números (15%)**: es el primer patrón que percibes y condiciona tu estrategia inicial.
+- **Permutaciones de filas (15%) y columnas (15%)**: reflejan la flexibilidad estructural del tablero y la dificultad para reorganizar regiones.
+- **Permutaciones de bloques (11%)**: indican el grado de interconexión global y la necesidad de pensar en el tablero como un todo.
+- **Teoría de grafos (15%)**: mide la complejidad de las relaciones entre celdas y el efecto dominó de cada decisión.
+- **Combinatoria avanzada (15%)**: agrupa la dificultad por candidatos compartidos, coeficientes binomiales y entropía combinatorial, reflejando la cantidad y calidad de opciones por celda.
+- **Espacio de solución (14%)**: determina cuán abierto o restringido es el camino hacia la solución, afectando la claridad y el control del jugador.
 
-## Escala de Dificultad: ¿Qué Significa Cada Nivel?
+## Escala de dificultad: ¿Qué significa cada nivel?
 
-### 🟢 Fácil (1-3 puntos)
+### 🟢 Fácil (1-4 puntos)
 **Características del puzzle:**
-- Números bien distribuidos (cada uno aparece 3-4 veces)
-- Distribución conectada con clusters agrupados
-- Celdas vacías organizadas en bloques cohesivos
-- Exactamente 30 celdas llenas (51 vacías)
-- Patrones que permiten resolución secuencial
+- Números bien distribuidos (cada uno aparece 3-4 veces).
+- Clusters agrupados y baja entropía combinatorial.
+- Exactamente 30 celdas llenas (51 vacías).
+- Patrones que permiten resolución secuencial.
+- Baja conectividad y espacio de solución reducido.
 
 **Tu experiencia como jugador:**
-- Progreso constante y predecible
-- Decisiones mayormente obvias
-- Raramente te sientes "atascado"
-- Técnicas básicas (naked singles, hidden singles) son suficientes
-- Sensación de flujo continuo
-- Las pistas están estratégicamente agrupadas para facilitar el análisis
+- Progreso constante y predecible.
+- Decisiones mayormente obvias.
+- Raramente te sientes "atascado".
+- Técnicas básicas (naked singles, hidden singles) son suficientes.
+- Sensación de flujo continuo.
 
-### 🟡 Medio (4-6 puntos)
+### 🔴 Difícil (5-10 puntos)
 **Características del puzzle:**
-- Distribución balanceada: 60% clusters conectados + 40% dispersión controlada
-- Estructura semi-flexible con algunas interconexiones
-- Exactamente 30 celdas llenas (51 vacías)
-- Combina áreas fáciles con secciones que requieren más análisis
-- Balance entre patrones obvios y desafíos moderados
+- Distribución maximizada en dispersión y desconexión.
+- Alta entropía combinatorial y candidatos caóticos.
+- Celdas llenas estratégicamente aisladas unas de otras.
+- Exactamente 30 celdas llenas (51 vacías).
+- Patrones que requieren análisis global y pensamiento sistémico.
+- Alta conectividad y espacio de solución amplio.
 
 **Tu experiencia como jugador:**
-- Progreso variable: algunas secciones fluyen, otras requieren pausa
-- Mezcla de decisiones obvias con algunas que requieren análisis
-- Ocasionalmente necesitarás técnicas intermedias
-- Buen nivel para practicar transición entre técnicas básicas y avanzadas
-- Sensación de desafío controlado y progresión educativa
+- Requiere análisis profundo y sistemático.
+- Muchas decisiones no son obvias.
+- Necesitas técnicas avanzadas.
+- Frecuentes "callejones sin salida" que requieren backtracking.
+- Sensación de resolver un rompecabezas complejo, no solo rellenar números.
 
-### 🔴 Difícil (8-10 puntos)
-**Características del puzzle:**
-- Distribución maximizada en dispersión y desconexión
-- Celdas llenas estratégicamente aisladas unas de otras
-- Exactamente 30 celdas llenas (51 vacías)
-- Alta desconexión entre regiones del tablero
-- Patrones que requieren análisis global y pensamiento sistémico
+## Ejemplos prácticos de cada métrica
 
-**Tu experiencia como jugador:**
-- Requiere análisis profundo y sistemático
-- Muchas decisiones no son obvias
-- Necesitas técnicas avanzadas (X-Wing, Swordfish, forcing chains)
-- Frecuentes "callejones sin salida" que requieren backtracking
-- Sensación de resolver un rompecabezas complejo, no solo rellenar números
-- Las pistas dispersas requieren constante reevaluación de todo el tablero
-
-## Ejemplos Prácticos de Cada Métrica
-
-### 📊 Ejemplo: Distribución de Números
+### 📊 Ejemplo: distribución de números
 ```
 🟢 Puzzle Fácil (Clusters Conectados):
 1: ████ (4 veces)    4: ███ (3 veces)     7: ███ (3 veces)
 2: ███ (3 veces)     5: ████ (4 veces)    8: ███ (3 veces)  
 3: ███ (3 veces)     6: ███ (3 veces)     9: ████ (4 veces)
 └─ Distribución agrupada = Patrones fáciles de seguir
-
-🟡 Puzzle Medio (Balance Híbrido):
-1: ███ (3 veces)     4: ████ (4 veces)    7: ███ (3 veces)
-2: ████ (4 veces)    5: ███ (3 veces)     8: ████ (4 veces)
-3: ███ (3 veces)     6: ███ (3 veces)     9: ███ (3 veces)
-└─ Distribución semi-balanceada = Requiere análisis moderado
 
 🔴 Puzzle Difícil (Máxima Dispersión):  
 1: ██████ (6 veces)  4: █ (1 vez)         7: ██ (2 veces)
@@ -215,58 +223,22 @@ Dificultad Final =
 └─ Distribución completamente dispersa = Análisis global requerido
 ```
 
-### 🕸️ Ejemplo: Patrones de Conectividad
-```
-🟢 Distribución Conectada (Fácil):
-┌─────┬─────┬─────┐
-│ X X │ . . │ . . │  ← Clusters agrupados permiten
-│ X . │ X X │ . . │    resolución secuencial por
-│ . . │ X . │ X X │    bloques cohesivos
-├─────┼─────┼─────┤
-│ X X │ . . │ X . │
-│ . X │ X X │ X . │
-│ . . │ X . │ . X │
+### 🎲 Ejemplo: análisis de complejidad por nivel
 
-🟡 Distribución Balanceada (Medio):
-┌─────┬─────┬─────┐
-│ X . │ X . │ . X │  ← Combinación de clusters
-│ . X │ . . │ X . │    con algunas celdas
-│ X . │ X X │ . . │    estratégicamente dispersas
-├─────┼─────┼─────┤
-│ . X │ . X │ X . │
-│ X . │ X . │ . X │
-│ . . │ . X │ X . │
-
-🔴 Distribución Dispersa (Difícil):
-┌─────┬─────┬─────┐
-│ . X │ . . │ X . │  ← Celdas altamente dispersas
-│ X . │ . X │ . . │    requieren análisis global
-│ . . │ X . │ . X │    constante y pensamiento
-├─────┼─────┼─────┤    sistémico
-│ X . │ . . │ . X │
-│ . . │ X . │ X . │
-│ . X │ . X │ . . │
-```
-
-### 🎲 Ejemplo: Análisis de Complejidad por Nivel
 ```
 🟢 Estrategia Fácil:
-- Buscar clusters conectados
-- Resolver bloques 3x3 independientemente  
-- Usar patrones obvios dentro de cada grupo
-- Progresión lineal: Bloque A → Bloque B → Bloque C
-
-🟡 Estrategia Medio:
-- Alternar entre clusters y análisis de dispersión
-- Combinar técnicas básicas con eliminación moderada
-- Evaluar consecuencias entre bloques relacionados
-- Progresión variable: resolver fácil → analizar difícil → resolver fácil
+- Identificar clusters agrupados y patrones claros
+- Resolver bloques 3x3 con baja entropía combinatorial
+- Usar técnicas básicas y avanzar por zonas
+- Progresión lineal y controlada, con pocas opciones por celda
+- Decisiones directas y bajo riesgo de error
 
 🔴 Estrategia Difícil:
-- Análisis global constante de todo el tablero
-- Técnicas avanzadas: forcing chains, pattern overlay
-- Cada decisión afecta múltiples regiones
-- Progresión no-lineal: requiere backtracking y reevaluación continua
+- Analizar el tablero completo con alta entropía combinatorial
+- Adaptar técnicas avanzadas y reevaluar constantemente
+- Resolver con candidatos caóticos y alta conectividad
+- Progresión no-lineal, requiere backtracking y análisis global
+- Decisiones complejas y frecuentes puntos de bloqueo
 ```
 ---
 

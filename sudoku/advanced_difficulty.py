@@ -54,10 +54,10 @@ class AdvancedDifficultySystem:
         
         # Combinar todas las métricas con pesos matemáticamente justificados
         total_complexity = (
-            number_distribution * 0.15 +      # 15% - Permutaciones de números
+            number_distribution * 0.15 +      # 15% - Distribución de numeros
             row_permutations * 0.15 +         # 15% - Permutaciones de filas
             col_permutations * 0.15 +         # 15% - Permutaciones de columnas
-            block_permutations * 0.11 +       # 11% -  Permutaciones de bloques
+            block_permutations * 0.11 +       # 11% - Permutaciones de bloques
             graph_complexity * 0.15 +         # 15% - Teoría de grafos
             combinatorial_complexity * 0.15 + # 15% - Combinatoria avanzada
             solution_space * 0.14             # 14% - Espacio de solución
