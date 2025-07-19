@@ -10,8 +10,6 @@
 
 ---
 
-## 1. Sistema de Dificultad - Sudoku
-
 # Sistema de Dificultad - Sudoku
 
 ## ¿Cómo Influyen las Matemáticas Discretas en la Dificultad del Sudoku?
