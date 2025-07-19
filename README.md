@@ -38,15 +38,15 @@ python main.py
 ## Estructura del Proyecto
 
 ```
-├── main.py                                         # Punto de entrada de la aplicación
+├── main.py                     # Punto de entrada de la aplicación
 ├── sudoku/
-│   ├── __init__.py                                 # Paquete de sudoku
-│   ├── constants.py                                # Constantes y configuraciones
-│   ├── board.py                                    # Lógica del tablero y algoritmos
-│   ├── gui.py                                      # Interfaz gráfica de usuario
-│   ├── game.py                                     # Clase principal del juego
-│   └── CONSIDERACIONES_TECNICAS_Y_TEORICAS.md      # Archivo con especificaciones de la implementación
-└── README.md           # Este archivo
+│   ├── __init__.py             # Paquete de sudoku
+│   ├── constants.py            # Constantes y configuraciones
+│   ├── board.py                # Lógica del tablero y algoritmos
+│   ├── gui.py                  # Interfaz gráfica de usuario
+│   ├── game.py                 # Clase principal del juego
+│   └── README.md               # Archivo con especificaciones de la implementación
+└── README.md                   # Este archivo
 ```
 
 ## Niveles de Dificultad
