@@ -52,22 +52,8 @@ python main.py
 ## Niveles de Dificultad
 
 El sistema asigna automáticamente un nivel de dificultad del 1 al 10:
-- **Fácil**: niveles 1-3.
-- **Difícil**: niveles 8-10.
-
-## Características Técnicas
-
-- **Ventana maximizada**: la aplicación se ejecuta en ventana grande pero no pantalla completa.
-- **Interfaz lateral organizada**: tablero fijo a la izquierda, panel de información estructurado a la derecha.
-- **Distribución sin superposiciones**: textos y botones organizados en secciones bien definidas.
-- **Separadores visuales**: líneas divisorias que delimitan cada sección de información.
-- **Etiquetas descriptivas**: cada grupo de botones tiene su etiqueta correspondiente.
-- **Colores diferenciados**: los números iniciales aparecen en gris oscuro y no son editables.
-- **Feedback visual**: las celdas se resaltan al seleccionarlas.
-- **Información de dificultad**: muestra claramente el nivel actual (1-10) y los rangos por dificultad.
-- **Validación en tiempo real**: la verificación muestra errores inmediatamente.
-- **Persistencia de estado**: el tablero mantiene su estado durante toda la sesión.
-- **Navegación fácil**: tecla ESC para salir, ventana redimensionable.
+- **Fácil**: niveles 1-5.
+- **Difícil**: niveles 6-10.
 
 ## Contribuciones
 
